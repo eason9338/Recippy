@@ -61,7 +61,7 @@ const User = () => {
                                 <p>{post.post_content}</p>
                                 <div>
                                     {post.post_tags.map((tag, index) => {
-                                        return <span key={index}>{tag}</span>
+                                        return <span key={index}># {tag}</span>
                                     })}
                                 </div>
                             </div>
