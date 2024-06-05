@@ -8,6 +8,7 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
+                console.log('post_id on post.js', post_id);
                 const response = await fetch(`http://localhost:8000/api/post/${post_id}`);
                 const data = await response.json();
                 if(data.success) {
