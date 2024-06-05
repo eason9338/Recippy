@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext.js';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useSearch } from '../context/SearchContext.js';
+import { useSearch } from '../context/SearchContext.js'; 
 import '../style/Post.css';
 
 const Home = () => {
@@ -9,7 +9,7 @@ const Home = () => {
     const location = useLocation();
 
     const { user } = useUser();
-    const { results, getPostList, handleTagSearch, handleKeywordSearch } = useSearch();
+    const { results, getPostList, handleTagSearch, handleKeywordSearch } = useSearch(); 
     const [selectedTags, setSelectedTags] = useState([]);
 
     useEffect(() => {
@@ -29,7 +29,6 @@ const Home = () => {
     }, [results]);
 
     const handlePostClick = (post_id) => {
-        console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
 
@@ -47,7 +46,7 @@ const Home = () => {
         <div>
             {Array.isArray(results) && results.length > 0 ? (
                 results.map((post, index) => (
-                    <div key={index} className="post" onClick={() => handlePostClick(post.id)}>
+                    <div key={index} className="post" onClick={() => handlePostClick(post.post_id)}>
                         <div className="post_inside">
                             <div className='poster-info'>
                                 <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>

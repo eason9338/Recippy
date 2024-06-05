@@ -77,7 +77,7 @@ const User = () => {
                                 <p>{post.post_content}</p>
                                 <div>
                                     {post.post_tags.map((tag, index) => {
-                                        return <span key={index} className='tag'>{tag}</span>
+                                        return <span key={index}># {tag}</span>
                                     })}
                                     <div class="btn-group" role="group" aria-label="Basic outlined example">
                                     {/* 讚數 */}

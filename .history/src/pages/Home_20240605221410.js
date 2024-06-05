@@ -29,7 +29,6 @@ const Home = () => {
     }, [results]);
 
     const handlePostClick = (post_id) => {
-        console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
 
@@ -51,15 +50,15 @@ const Home = () => {
                         <div className="post_inside">
                             <div className='poster-info'>
                                 <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>
-                                    {post.user_name ? post.user_name.charAt(0).toUpperCase() : ''}
+                                    {post.name ? post.name.charAt(0).toUpperCase() : ''}
                                 </div>
-                                <p className="poster-name">{post.user_name}</p>
+                                <p className="poster-name">{post.name}</p>
                             </div>
-                            <h3 className='post-title'>{post.post_title}</h3>
-                            {post.post_tags && post.post_tags.map((tag, index) => (
+                            <h3 className='post-title'>{post.title}</h3>
+                            {post.tags && post.tags.map((tag, index) => (
                                 <span className='tag' key={index}>{tag}</span>
                             ))}
-                            <p className="post-content">{post.post_content}</p>
+                            <p className="post-content">{post.content}</p>
                         </div>
                     </div>
                 ))

@@ -205,7 +205,7 @@ router.get('/post/:post_id', async (req, res) => {
         const [postResults, fields] = await db.promise().query(postQuery, [post_id]);
 
         if (postResults.length === 0) {
-            res.status(404).json({ success: false, message: 'Post not found', param: post_id });
+            res.status(404).json({ success: false, message: 'Post not found', param: postId });
             return;
         }
 
