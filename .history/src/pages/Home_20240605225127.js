@@ -50,7 +50,7 @@ const Home = () => {
                         <div className="post_inside">
                             <div className='poster-info'>
                                 <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>
-                                    {post.user_name ? post.user_name.charAt(0).toUpperCase() : ''}
+                                    {post.name ? post.user_name.charAt(0).toUpperCase() : ''}
                                 </div>
                                 <p className="poster-name">{post.user_name}</p>
                             </div>
