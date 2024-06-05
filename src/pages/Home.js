@@ -59,23 +59,23 @@ const Home = () => {
                     <div key={index} className="post" onClick={() => handlePostClick(post.id)}>
 
                         <div style={{ display: 'flex' }}>
-                            <div className="post_inside" style={{ flex: 7 }}>
-                            <div className='poster-info'>
-                                <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>
-                                    {post.name ? post.name.charAt(0).toUpperCase() : ''}
+                            <div className="post_inside"  style={{  flex: 7,justifyContent: 'space-between' }}>
+                                <div className='poster-info'>
+                                    <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>
+                                        {post.name ? post.name.charAt(0).toUpperCase() : ''}
+                                    </div>
+                                    <p className="poster-name">{post.name}</p>
                                 </div>
-                                <p className="poster-name">{post.name}</p>
-                            </div>
-                            <h3 className='post-title'>{post.title}</h3>
-                            <p className="post-content">{post.content}</p>
-                            {post.tags && post.tags.map((tag, index) => (
-                                <span className='tag' key={index}>{tag}</span>
-                            ))}
-                            <div class="button">
-                                <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
-                                <FontAwesomeIcon icon={faComment} className="comment-icon" />       
-                                <FontAwesomeIcon icon={faShare} className="comment-icon" />
-                            </div>
+                                <h3 className='post-title'>{post.title}</h3>
+                                <p className="post-content">{post.content}</p>
+                                {post.tags && post.tags.map((tag, index) => (
+                                    <span className='tag' key={index}>{tag}</span>
+                                ))}
+                                <div class="button">
+                                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                                    <FontAwesomeIcon icon={faComment} className="comment-icon" />       
+                                    <FontAwesomeIcon icon={faShare} className="comment-icon" />
+                                </div>
                             </div>
                             <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center'}}>
                             <img 
