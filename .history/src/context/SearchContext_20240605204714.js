@@ -9,26 +9,21 @@ export const SearchProvider = ({ children }) => {
     const [results, setResults] = useState([]);
     const { user } = useUser();
 
-    
-
     const handleKeywordSearch = async (query) => {
         if (query.trim()) {
             try {
                 const response = await fetch(`http://localhost:8000/api/search?q=${query}`);
                 const data = await response.json();
-                console.log(data); // 調試用，查看伺服器返回的數據結構
                 if (data.success) {
-                    setResults(data.posts); // 確保更新結果的鍵名正確
+                    setResults(data.posts); // 更新搜尋結果
                 } else {
                     console.error('Search failed:', data.message);
-                    getPostList(user.user_id);
                 }
             } catch (error) {
                 console.error('Error during search:', error);
             }
         }
     };
-
 
     const handleTagSearch = async (tags) => {
         if (tags.length > 0) {
