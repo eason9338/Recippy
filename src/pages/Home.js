@@ -50,22 +50,17 @@ const Home = () => {
                     <div key={index} className="post" onClick={() => handlePostClick(post.id)}>
                         <div className="post_inside">
                             <div className='poster-info'>
-                                <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>
+                                <div className='poster-pic'>
                                     {post.name ? post.name.charAt(0).toUpperCase() : ''}
                                 </div>
                                 <p className="poster-name">{post.name}</p>
                             </div>
                             <h3 className='post-title'>{post.title}</h3>
                             {post.tags && post.tags.map((tag, index) => (
-                                <span className='tag' key={index}>{tag}</span>
+                                <span className='tag' key={index}># {tag}</span>
                             ))}
                             <p className="post-content">{post.content}</p>
                         </div>
-                        <h3 className='post-title'>{post.title}</h3>
-                        {post.tags.map((tag, index) => (
-                            <span className='tag' key={index}># {tag}</span>
-                        ))}
-                        <p className="post-content">{post.content}</p>
                     </div>
                 ))
             ) : (
