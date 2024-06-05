@@ -22,9 +22,7 @@ const User = () => {
         navigate('/')
         console.log('登出成功')
     }
-    const likeClick = () => {
-        setLikes(likes + 1);
-      };
+    
     useEffect(() => {
         const fetchPosts = async () => {
             //將測試資料改為以下的api

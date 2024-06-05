@@ -58,6 +58,7 @@ const Home = () => {
                             {post.tags && post.tags.map((tag, index) => (
                                 <span className='tag' key={index}>{tag}</span>
                             ))}
+                            <p>iejdoi</p>
                             <p className="post-content">{post.content}</p>
                         </div>
                     </div>

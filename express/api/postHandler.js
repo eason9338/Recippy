@@ -115,12 +115,13 @@ router.get('/posts', (req, res) => {
     });
 });
 
-
+//新增貼文
 router.post('/post', async (req, res) => {
-    const { title, content, selectedTags, selectImage, user_id } = req.body;
+    const { title, content, selectedTags, selectedImg, user_id } = req.body;
 
     try {
-        const imgResults = await db.promise().query('INSERT INTO image (image) VALUES (?)', [selectImage]);
+        console.log(selectedImg);
+        const imgResults = await db.promise().query('INSERT INTO image (url_string) VALUES (?)', [selectedImg]);
         const imgId = imgResults[0].insertId;
 
         const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, image_id) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
