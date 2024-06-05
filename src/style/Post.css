@@ -53,3 +53,20 @@ h2 {
 .poster-name {
     font-size: 20px;
 }
+
+.post-title {
+    margin-bottom: 5px;
+}
+
+.post-content {
+    margin-top: 5px;
+}
+
+.tag {
+    background-color: rgb(225, 225, 225);
+    border-radius: 30px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 5px;
+}
