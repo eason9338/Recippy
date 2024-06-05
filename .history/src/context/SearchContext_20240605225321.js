@@ -60,7 +60,7 @@ export const SearchProvider = ({ children }) => {
                     post_content: post.post_content,
                     post_tags: post.post_tags,
                     id: post.post_id,
-                    user_name: post.user_name
+                    post_name: post.user_name
                 }));
                 setResults(newPosts);
                 console.log(results);  
