@@ -23,6 +23,7 @@ function App() {
                 <Routes>
                   <Route path='*' element={<NotFound />} />
                   <Route path='/' element={<Home />} />
+                  <Route path='/post/:post_id' element={<Home />} />
                   <Route path='/login' element={<Login />} />
                   <Route path='/sign-up' element={<Signup />} />
                   <Route path='/user' element={<User />} />
