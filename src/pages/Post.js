@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 const PostDetail = () => {
-    const { postId } = useParams();
+    const { post_id } = useParams();
     const [post, setPost] = useState(null);
 
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/post/${postId}`);
+                const response = await fetch(`http://localhost:8000/api/post/${post_id}`);
                 const data = await response.json();
                 if(data.success) {
                     setPost(data.post);
@@ -21,7 +21,7 @@ const PostDetail = () => {
         };
 
         fetchPostData();
-    }, [postId]);
+    }, [post_id]);
 
     if (!post) {
         return <div>Loading...</div>;
