@@ -46,13 +46,13 @@ router.get('/search', (req, res) => {
             }
 
             const posts = searchResults.map(post => ({
-                id: post.post_id,
-                title: post.post_title,
-                content: post.post_content,
-                tags: tagResults
+                post_id: post.post_id,
+                post_title: post.post_title,
+                post_content: post.post_content,
+                post_tags: tagResults
                     .filter(tag => tag.post_id === post.post_id)
                     .map(tag => tag.tag_name),
-                name: post.user_name
+                user_name: post.user_name
             }));
 
             res.status(200).json({ success: true, posts });
@@ -114,6 +114,7 @@ router.get('/posts', (req, res) => {
         });
     });
 });
+
 
 router.post('/post', async (req, res) => {
     const { title, content, selectedTags, selectImage, user_id } = req.body;
@@ -186,48 +187,6 @@ router.post('/searchByTags', async (req, res) => {
         console.error('Error fetching posts by tags: ', err);
         res.status(500).send('Server error');
     
-    }
-});
-
-router.get('/post/:postId', async (req, res) => {
-    const postId = req.params.postId;
-
-    try {
-        const postQuery = `
-            SELECT post.post_id, post.title AS post_title, post.content AS post_content, user.user_name
-            FROM post
-            JOIN user ON post.user_id = user.user_id
-            WHERE post.post_id = ?
-        `;
-
-        const [postResults, fields] = await db.promise().query(postQuery, [postId]);
-
-        if (postResults.length === 0) {
-            res.status(404).json({ success: false, message: 'Post not found' });
-            return;
-        }
-
-        const post = postResults[0];
-
-        const tagQuery = `
-            SELECT t.tag_name
-            FROM post_tag pt
-            JOIN tag t ON pt.tag_id = t.tag_id
-            WHERE pt.post_id = ?
-        `;
-
-        const [tagResults, tagFields] = await db.promise().query(tagQuery, [postId]);
-
-        res.status(200).json({ success: true, post: {
-            id: post.post_id,
-            title: post.post_title,
-            content: post.post_content,
-            name: post.user_name,
-            tags: tagResults.map(tag => tag.tag_name)
-        }});
-    } catch (err) {
-        console.error('Error fetching post: ', err);
-        res.status(500).send('Server error');
     }
 });
 
