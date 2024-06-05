@@ -189,21 +189,22 @@ router.post('/searchByTags', async (req, res) => {
     }
 });
 
-router.get('/post/:postId', async (req, res) => {
-    const postId = req.params.postId;
+router.get('/post/:post_id', async (req, res) => {
+    const post_id = req.params.post_id;
 
+    console.log('postId: ', post_id);
     try {
         const postQuery = `
-            SELECT post.post_id, post.title AS post_title, post.content AS post_content, user.user_name
+            SELECT post.post_id, post.title AS post_title, post.content AS post_content, post.like_tag, post.share_tag, user.user_name
             FROM post
             JOIN user ON post.user_id = user.user_id
             WHERE post.post_id = ?
         `;
 
-        const [postResults, fields] = await db.promise().query(postQuery, [postId]);
+        const [postResults, fields] = await db.promise().query(postQuery, [post_id]);
 
         if (postResults.length === 0) {
-            res.status(404).json({ success: false, message: 'Post not found' });
+            res.status(404).json({ success: false, message: 'Post not found', param: postId });
             return;
         }
 
@@ -216,13 +217,15 @@ router.get('/post/:postId', async (req, res) => {
             WHERE pt.post_id = ?
         `;
 
-        const [tagResults, tagFields] = await db.promise().query(tagQuery, [postId]);
+        const [tagResults, tagFields] = await db.promise().query(tagQuery, [post_id]);
 
         res.status(200).json({ success: true, post: {
             id: post.post_id,
             title: post.post_title,
             content: post.post_content,
             name: post.user_name,
+            share_tag: post.share_tag,
+            like_tag: post.like_tag,
             tags: tagResults.map(tag => tag.tag_name)
         }});
     } catch (err) {

@@ -9,6 +9,7 @@ import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
 import User from './pages/User.js';
 import Create from './pages/Create.js';
+import Post from './pages/Post.js';
 
 import './App.js';
 
@@ -23,7 +24,7 @@ function App() {
                 <Routes>
                   <Route path='*' element={<NotFound />} />
                   <Route path='/' element={<Home />} />
-                  <Route path='/post/:post_id' element={<Home />} />
+                  <Route path='/post/:post_id' element={<Post />} />
                   <Route path='/login' element={<Login />} />
                   <Route path='/sign-up' element={<Signup />} />
                   <Route path='/user' element={<User />} />

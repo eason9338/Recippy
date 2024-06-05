@@ -29,6 +29,7 @@ const Home = () => {
     }, [results]);
 
     const handlePostClick = (post_id) => {
+        console.log(post_id); 
         navigate(`/post/${post_id}`);
     };
 
