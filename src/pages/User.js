@@ -1,12 +1,11 @@
-import { useUser } from '../context/UserContext.js';
 import { useEffect, useState } from 'react';
+import { useUser } from '../context/UserContext.js';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShare } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { faCommentMedical } from '@fortawesome/free-solid-svg-icons'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
-
 import '../style/Post.css';
 
 const User = () => {
@@ -23,7 +22,9 @@ const User = () => {
         navigate('/')
         console.log('登出成功')
     }
-
+    const likeClick = () => {
+        setLikes(likes + 1);
+      };
     useEffect(() => {
         const fetchPosts = async () => {
             //將測試資料改為以下的api

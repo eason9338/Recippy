@@ -53,3 +53,28 @@ h2 {
 .poster-name {
     font-size: 20px;
 }
+.tag{
+    background-color: #400263;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+    display:inline-block;
+    margin-top: 10px;
+}
+.button {
+    display: flex;
+    gap: 10px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer; 
+    align-items: center;
+    margin-top: 10px;
+}
+
+.like-icon :hover {
+    color: red;
+  }
+.comment-icon :hover{
+    color: blue;
+}
