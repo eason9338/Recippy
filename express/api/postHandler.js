@@ -52,7 +52,8 @@ router.get('/search', (req, res) => {
                 post_tags: tagResults
                     .filter(tag => tag.post_id === post.post_id)
                     .map(tag => tag.tag_name),
-                user_name: post.user_name
+                user_name: post.user_name,
+                post_img: post.url_string
             }));
 
             res.status(200).json({ success: true, posts });
@@ -66,7 +67,7 @@ router.get('/posts', (req, res) => {
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id
         FROM post
         JOIN user ON post.user_id = user.user_id
     `;
@@ -115,16 +116,15 @@ router.get('/posts', (req, res) => {
     });
 });
 
-//新增貼文
+
 router.post('/post', async (req, res) => {
-    const { title, content, selectedTags, selectedImg, user_id } = req.body;
+    const { title, content, selectedTags, selectImage, user_id } = req.body;
 
     try {
-        console.log(selectedImg);
-        const imgResults = await db.promise().query('INSERT INTO image (url_string) VALUES (?)', [selectedImg]);
+        const imgResults = await db.promise().query('INSERT INTO image (url_string) VALUES (?)', [selectImage]);
         const imgId = imgResults[0].insertId;
 
-        const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, image_id) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
+        const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, img_url) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
         const postId = postResults[0].insertId;
 
         await Promise.all(selectedTags.map(tag => {
@@ -188,6 +188,51 @@ router.post('/searchByTags', async (req, res) => {
         console.error('Error fetching posts by tags: ', err);
         res.status(500).send('Server error');
     
+    }
+});
+
+router.get('/post/:post_id', async (req, res) => {
+    const post_id = req.params.post_id;
+
+    console.log('postId: ', post_id);
+    try {
+        const postQuery = `
+            SELECT post.post_id, post.title AS post_title, post.content AS post_content, post.like_tag, post.share_tag, user.user_name
+            FROM post
+            JOIN user ON post.user_id = user.user_id
+            WHERE post.post_id = ?
+        `;
+
+        const [postResults, fields] = await db.promise().query(postQuery, [post_id]);
+
+        if (postResults.length === 0) {
+            res.status(404).json({ success: false, message: 'Post not found', param: post_id });
+            return;
+        }
+
+        const post = postResults[0];
+
+        const tagQuery = `
+            SELECT t.tag_name
+            FROM post_tag pt
+            JOIN tag t ON pt.tag_id = t.tag_id
+            WHERE pt.post_id = ?
+        `;
+
+        const [tagResults, tagFields] = await db.promise().query(tagQuery, [post_id]);
+
+        res.status(200).json({ success: true, post: {
+            id: post.post_id,
+            title: post.post_title,
+            content: post.post_content,
+            name: post.user_name,
+            share_tag: post.share_tag,
+            like_tag: post.like_tag,
+            tags: tagResults.map(tag => tag.tag_name)
+        }});
+    } catch (err) {
+        console.error('Error fetching post: ', err);
+        res.status(500).send('Server error');
     }
 });
 

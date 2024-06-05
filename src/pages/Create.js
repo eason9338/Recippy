@@ -100,19 +100,20 @@ const Create = () => {
                         onChange={(e) => setTitle(e.target.value)}
                     ></input>
                     <p>內容</p>
-                    <input
+                    <input className='content'
                         type="text"
                         required
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
+                        
                     ></input>
-                    <p>標籤</p>
+{/*                    
                     <input 
                         type="file"
                         required
                         //value={"img"}
                         onChange={(e) => handleFileChange(e)}
-                    ></input>
+                    ></input> */}
                     {selectedImg && (
                         <img src={selectedImg} alt="Selected" style={{ width: '200px' }} />
                     )}
@@ -122,6 +123,7 @@ const Create = () => {
                         required
                         onChange={(e) => setSelectedImg(e.target.value)}
                     ></input>
+                     <p>標籤</p>
                     <Select
                         value={selectedTags}
                         onChange={handleChange}

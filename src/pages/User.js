@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShare } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
-import { faCommentMedical } from '@fortawesome/free-solid-svg-icons'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faComment} from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import '../style/Post.css';
+
 
 const User = () => {
     const {user, setUser} = useUser();
@@ -14,7 +15,6 @@ const User = () => {
     const displayName = user && user.user_name ? user.user_name : '';
     const navigate = useNavigate();
     const [likes, setLikes] = useState(0);
-
 
     const logout = () => {
         setUser(null)
@@ -61,20 +61,31 @@ const User = () => {
     const likeClick = () => {
         setLikes(likes + 1);
       };
+    const lineClick = () => {
+        const result = window.confirm("要刪除貼文嗎？");
+    if (result) {
+        //確定的話
+    } else {
+        //取消就取消
+    }
+    }
+   
 
-
+   
       return ( 
         <div>
             <h2 className={displayName ? '' : 'hide'}>Hello {displayName}, this is your personal page</h2>
             <div>
                 {
                     posts ? posts.map((post, index) => {
-                        console.log(post)
+                        console.log("get",post)
                         return (
                             <div key={index} className='post'>
-                                <div class="">
+                                 
+                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <h3>{post.post_title}</h3>
-                                    <FontAwesomeIcon icon={faBars} />
+                                    <FontAwesomeIcon icon={faTrash}  className="line＿icon" onClick={lineClick} />
+                                    
                                 </div>
                                 <p>{post.post_content}</p>
                                 <div>
@@ -100,8 +111,8 @@ const User = () => {
                                         </button> */}
                                         <div class="button">
                                             <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
-                                            <FontAwesomeIcon icon={faCommentMedical} className="comment-icon" />       
-                                            <FontAwesomeIcon icon={faShare} style={{color: "#1f5120",}} />
+                                            <FontAwesomeIcon icon={faComment} className="comment-icon" />       
+                                            <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                         </div>
                                      </div>
                                 </div>
