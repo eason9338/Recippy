@@ -51,7 +51,7 @@ const Home = () => {
                         </div>
                         <h3 className='post-title'>{post.title}</h3>
                         {post.tags.map((tag, index) => (
-                            <span className='tag' key={index}>{tag}</span>
+                            <span className='tag' key={index}># {tag}</span>
                         ))}
                         <p className="post-content">{post.content}</p>
                     </div>
