@@ -7,7 +7,8 @@
     border-radius: 20px;
     background-color: rgb(245, 245, 245);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 70%;
+    width: 840px;
+    height: fit-content;
 }
 
 .post-info {
@@ -35,8 +36,9 @@
     margin-bottom: 10px;
 }
 
-.margin-content {
-    margin-bottom: 15px;
+
+.post-content {
+    margin-bottom: 20px;
 }
 
 .tag {
@@ -45,7 +47,9 @@
     padding: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    margin-top: 10px;
     margin-right: 5px;
+    font-size: 15px;
 }
 
 
@@ -53,6 +57,7 @@
     background: none;
     border: none;
     display: flex;
+    padding-top: 15px;
 }
 
 .like-button, .share-button {
@@ -64,15 +69,18 @@
     margin-right: 10px;
 }
 
-.liked {
+.like-button.liked {
     color: rgb(205, 82, 82);
 }
 
-.shared {
+.share-button.shared {
     color: rgb(54, 103, 188);
 }
 
 .like_num, .share_num {
     color: rgb(174, 174, 174);
+    display: inline;
+    align-items: baseline;
+    margin: 10px;
 }
 

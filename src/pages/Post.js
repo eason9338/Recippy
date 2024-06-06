@@ -7,19 +7,25 @@ import '../style/clickPost.css';
 const PostDetail = () => {
     const { post_id } = useParams();
     const [post, setPost] = useState(null);
-    const[likeCount, setLikeCount] = useState(post.like_tag);
-    const[shareCount, setShareCount] = useState(post.share_tag);
+    //const[likeCount, setLikeCount] = useState(post.like_tag);
+    const[likeCount, setLikeCount] = useState(0);
+    //const[shareCount, setShareCount] = useState(post.share_tag);
+    const[shareCount, setShareCount] = useState(0);
     const[isLiked, setIsLiked] = useState(false);
     const[isShared, setIsShared] = useState(false);
 
     const handleLike = () => {
-        setLikeCount(likeCount + 1);
-        setIsLiked(true);
+        if(!isLiked) {
+            setLikeCount(likeCount + 1);
+            setIsLiked(true);
+        }
     };
 
     const handleShare = () => {
-        setShareCount(shareCount +1);
-        setIsShared(true);
+        if(!isShared) {
+            setShareCount(shareCount +1);
+            setIsShared(true);
+        }
     };
 
 
@@ -31,6 +37,8 @@ const PostDetail = () => {
                 const data = await response.json();
                 if(data.success) {
                     setPost(data.post);
+                    setLikeCount(data.post.like_tag || 0);
+                    setShareCount(data.post.share_tag || 0);
                 } else {
                     console.error('文章讀取失敗', data.message);
                 }
@@ -59,18 +67,18 @@ const PostDetail = () => {
                 <p className='post-content'>{post.content}</p>
                 {post.tags && post.tags.map((tag, index) => (
                     <span className='tag' key={index}># {tag}</span>
-                ))}             
-            </div>
-
-            <div className='interaction'>
-                <button className={`like-button ${isLiked ? 'liked' : ''}`} onClick = {handleLike}>
-                    <FontAwesomeIcon icon={faHeart}/><p className='like_num'> {likeCount}</p>
-                    <p className='like_num'>{likeCount}</p>
-                </button>
-                <button className={`share-button ${isShared ? 'shared' : ''}`} onClick={handleShare}>
-                    <FontAwesomeIcon icon={faShare} />
-                    <p className='share_num'>{shareCount}</p>
-                </button>
+                ))}   
+                 
+                <div className='interaction'>
+                    <button className={`like-button ${isLiked ? 'liked' : ''}`} onClick = {handleLike} disabled={isLiked}>
+                        <FontAwesomeIcon icon={faHeart}/>
+                        <p className='like_num'>{likeCount ? likeCount : 0}</p>
+                    </button>
+                    <button className={`share-button ${isShared ? 'shared' : ''}`} onClick={handleShare} disabled={isShared}>
+                        <FontAwesomeIcon icon={faShare} />
+                        <p className='share_num'>{shareCount}</p>
+                    </button>
+                </div>         
             </div>
         </div>
     );
