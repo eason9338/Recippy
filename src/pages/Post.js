@@ -2,9 +2,16 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../style/clickPost.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faShare } from '@fortawesome/free-solid-svg-icons'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faComment} from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+
 const PostDetail = () => {
     const { post_id } = useParams();
     const [post, setPost] = useState(null);
+    const [likes, setLikes] = useState(0);
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -35,7 +42,7 @@ const PostDetail = () => {
             });
             const data = await response.json();
             if (data.success) {
-                // 更新本地的点赞数
+
                 setPost(prevPost => ({
                     ...prevPost,
                     like_tag: data.like_tag
@@ -46,7 +53,11 @@ const PostDetail = () => {
         } catch (error) {
             console.error('伺服器問題', error);
         }
-    };
+        handleLike();
+    }
+    const likeClick = () => {
+        setLikes(likes + 1);
+      };
 
     if (!post) {
         return <div>Loading...</div>;
@@ -54,9 +65,6 @@ const PostDetail = () => {
 
     return (
         <div>
-            <h1>{post.title}fff</h1>
-            <p>{post.content}</p>
-
             <div className='post'>
                 <div className='post-info'>
                     <div className='poster-pic'>
@@ -65,11 +73,16 @@ const PostDetail = () => {
                     <p className='poster-name'>{post.name}</p>
                 </div>
                 <h1 className='post-title'>{post.title}</h1>
+                <p className='post-content'>{post.content}</p>
                 {post.tags && post.tags.map((tag, index) => (
                     <span className='tag' key={index}># {tag}</span>
                 ))}
-                <p className='post-content'>{post.content}</p>
-                
+                <p className='post-content'>{post.like_tag}</p>
+                <div class="button">
+                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                    <FontAwesomeIcon icon={faComment} className="comment-icon" />       
+                    <FontAwesomeIcon icon={faShare} className="comment-icon" />
+                </div>
                 
             </div>
         </div>
