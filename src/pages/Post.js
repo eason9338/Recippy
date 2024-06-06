@@ -10,6 +10,7 @@ const PostDetail = () => {
         const fetchPostData = async () => {
 
             try {
+                console.log('post_id on post.js', post_id);
                 const response = await fetch(`http://localhost:8000/api/post/${post_id}`);
                 const data = await response.json();
                 if(data.success) {
@@ -56,6 +57,21 @@ const PostDetail = () => {
             <h1>{post.title}fff</h1>
             <p>{post.content}</p>
 
+            <div className='post'>
+                <div className='post-info'>
+                    <div className='poster-pic'>
+                        {post.name ? post.name.charAt(0).toUpperCase() : ''}
+                    </div>
+                    <p className='poster-name'>{post.name}</p>
+                </div>
+                <h1 className='post-title'>{post.title}</h1>
+                {post.tags && post.tags.map((tag, index) => (
+                    <span className='tag' key={index}># {tag}</span>
+                ))}
+                <p className='post-content'>{post.content}</p>
+                
+                
+            </div>
         </div>
     );
 }
