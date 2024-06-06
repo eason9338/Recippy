@@ -35,6 +35,7 @@ const Home = () => {
     }, [results]);
 
     const handlePostClick = (post_id) => {
+        console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
     const likeClick = () => {
@@ -57,7 +58,6 @@ const Home = () => {
             {Array.isArray(results) && results.length > 0 ? (
                 results.map((post, index) => (
                     <div key={index} className="post" onClick={() => handlePostClick(post.id)}>
-
                         <div style={{ display: 'flex' }}>
                             <div className="post_inside"  style={{  flex: 7,justifyContent: 'space-between' }}>
                                 <div className='poster-info'>

@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import '../style/clickPost.css';
 
 const PostDetail = () => {
-    const { postId } = useParams();
+    const { post_id } = useParams();
     const [post, setPost] = useState(null);
 
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/post/${postId}`);
+                console.log('post_id on post.js', post_id);
+                const response = await fetch(`http://localhost:8000/api/post/${post_id}`);
                 const data = await response.json();
                 if(data.success) {
                     setPost(data.post);
@@ -21,7 +23,7 @@ const PostDetail = () => {
         };
 
         fetchPostData();
-    }, [postId]);
+    }, [post_id]);
 
     if (!post) {
         return <div>Loading...</div>;
@@ -29,8 +31,21 @@ const PostDetail = () => {
 
     return (
         <div>
-            <h1>{post.title}</h1>
-            <p>{post.content}</p>
+            <div className='post'>
+                <div className='post-info'>
+                    <div className='poster-pic'>
+                        {post.name ? post.name.charAt(0).toUpperCase() : ''}
+                    </div>
+                    <p className='poster-name'>{post.name}</p>
+                </div>
+                <h1 className='post-title'>{post.title}</h1>
+                {post.tags && post.tags.map((tag, index) => (
+                    <span className='tag' key={index}># {tag}</span>
+                ))}
+                <p className='post-content'>{post.content}</p>
+                
+                
+            </div>
         </div>
     );
 }

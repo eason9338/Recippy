@@ -58,9 +58,9 @@ export const SearchProvider = ({ children }) => {
                 const newPosts = data.posts.map(post => ({
                     post_title: post.post_title,
                     post_content: post.post_content,
-                    post_tags: post.post_tags,
+                    tags: post.post_tags,
                     id: post.post_id,
-                    user_name: post.user_name
+                    name: post.user_name
                 }));
                 setResults(newPosts);
                 console.log(results);  
