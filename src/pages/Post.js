@@ -5,7 +5,7 @@ import { faHeart, faShare } from '@fortawesome/free-solid-svg-icons';
 import '../style/clickPost.css';
 
 const PostDetail = () => {
-    const { postId } = useParams();
+    const { post_id } = useParams();
     const [post, setPost] = useState(null);
     const[likeCount, setLikeCount] = useState(post.like_tag);
     const[shareCount, setShareCount] = useState(post.share_tag);
@@ -26,7 +26,8 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchPostData = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/post/${postId}`);
+                console.log('post_id on post.js', post_id);
+                const response = await fetch(`http://localhost:8000/api/post/${post_id}`);
                 const data = await response.json();
                 if(data.success) {
                     setPost(data.post);
@@ -39,7 +40,7 @@ const PostDetail = () => {
         };
 
         fetchPostData();
-    }, [postId]);
+    }, [post_id]);
 
     if (!post) {
         return <div>Loading...</div>;

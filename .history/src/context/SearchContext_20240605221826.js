@@ -14,12 +14,10 @@ export const SearchProvider = ({ children }) => {
             try {
                 const response = await fetch(`http://localhost:8000/api/search?q=${query}`);
                 const data = await response.json();
-                console.log(data); // 調試用，查看伺服器返回的數據結構
                 if (data.success) {
-                    setResults(data.posts); // 確保更新結果的鍵名正確
+                    setResults(data.posts); // 更新搜尋結果
                 } else {
                     console.error('Search failed:', data.message);
-                    getPostList(user.user_id);
                 }
             } catch (error) {
                 console.error('Error during search:', error);
@@ -39,7 +37,7 @@ export const SearchProvider = ({ children }) => {
                 });
                 const data = await response.json();
                 if (data.success) {
-                    setResults(data.results); // 更新搜尋結果
+                    setResults(data.posts); // 更新搜尋結果
                 } else {
                     // console.error('Tag search failed:', data.message);
                     getPostList(user.user_id)
@@ -56,11 +54,11 @@ export const SearchProvider = ({ children }) => {
             const data = await response.json();
             if (data.success) {
                 const newPosts = data.posts.map(post => ({
-                    post_title: post.post_title,
-                    post_content: post.post_content,
-                    post_tags: post.post_tags,
+                    title: post.post_title,
+                    content: post.post_content,
+                    tags: post.post_tags,
                     id: post.post_id,
-                    user_name: post.user_name
+                    name: post.user_name
                 }));
                 setResults(newPosts);
                 console.log(results);  

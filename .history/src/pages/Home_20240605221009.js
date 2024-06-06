@@ -29,7 +29,6 @@ const Home = () => {
     }, [results]);
 
     const handlePostClick = (post_id) => {
-        console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
 
@@ -46,8 +45,8 @@ const Home = () => {
     return (
         <div>
             {Array.isArray(results) && results.length > 0 ? (
-                results.map((post, index) => (
-                    <div key={index} className="post" onClick={() => handlePostClick(post.id)}>
+                results.map((post) => (
+                    <div key={post.post_id} className="post" onClick={() => handlePostClick(post.post_id)}>
                         <div className="post_inside">
                             <div className='poster-info'>
                                 <div className='poster-pic' style={{ backgroundColor: 'orange', color: 'white' }}>
