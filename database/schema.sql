@@ -6,17 +6,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_id_UNIQUE` (`user_id`)
 );
-
 CREATE TABLE IF NOT EXISTS `image` (
   `image_id` int NOT NULL AUTO_INCREMENT,
-  `image` longblob,
+  `url_string` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`image_id`)
 );
-
-CREATE TABLE IF NOT EXISTS  `post` (
+CREATE TABLE IF NOT EXISTS `post` (
   `title` varchar(225) NOT NULL,
   `post_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL ,
+  `user_id` int NOT NULL,
   `content` varchar(200) DEFAULT NULL,
   `share_tag` int DEFAULT NULL,
   `like_tag` int DEFAULT NULL,
@@ -28,7 +26,6 @@ CREATE TABLE IF NOT EXISTS  `post` (
   CONSTRAINT `user_ID_post` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
   CONSTRAINT `image_ID` FOREIGN KEY (`image_id`) REFERENCES `image` (`image_id`)
 );
-
 CREATE TABLE IF NOT EXISTS `comment` (
   `comment_id` int NOT NULL AUTO_INCREMENT,
   `post_id` int NOT NULL,
@@ -37,8 +34,6 @@ CREATE TABLE IF NOT EXISTS `comment` (
   KEY `post_ID_idx` (`post_id`),
   CONSTRAINT `post_ID` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE
 );
-
-
 CREATE TABLE IF NOT EXISTS `manager` (
   `manager_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
@@ -46,14 +41,12 @@ CREATE TABLE IF NOT EXISTS `manager` (
   `password` varchar(45) NOT NULL,
   PRIMARY KEY (`manager_id`)
 );
-
-CREATE TABLE IF NOT EXISTS  `tag` (
+CREATE TABLE IF NOT EXISTS `tag` (
   `tag_id` int NOT NULL AUTO_INCREMENT,
   `tag_name` varchar(255) NOT NULL,
-  `tag_type` enum('ingredient','cooker','type') NOT NULL,
+  `tag_type` enum('ingredient', 'cooker', 'type') NOT NULL,
   PRIMARY KEY (`tag_id`)
 );
-
 CREATE TABLE IF NOT EXISTS `interaction` (
   `post_id` int NOT NULL,
   `user_id` int DEFAULT NULL,
@@ -66,13 +59,12 @@ CREATE TABLE IF NOT EXISTS `interaction` (
   CONSTRAINT `post_post_ID` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE,
   CONSTRAINT `interaction_user_ID` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
-
 CREATE TABLE IF NOT EXISTS `report` (
   `user_id` int NOT NULL,
   `post_id` int NOT NULL,
   `repCom_id` int NOT NULL,
   `manager_id` int NOT NULL,
-  PRIMARY KEY (`user_id`,`post_id`),
+  PRIMARY KEY (`user_id`, `post_id`),
   KEY `post_ID_idx` (`post_id`),
   KEY `comment_ID_idx` (`repCom_id`),
   KEY `manager_id_idx` (`manager_id`),
@@ -81,11 +73,19 @@ CREATE TABLE IF NOT EXISTS `report` (
   CONSTRAINT `po_post_ID` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE,
   CONSTRAINT `user_user_ID` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
 );
-
-CREATE TABLE IF NOT EXISTS  `post_tag` (
-    `post_id` int NOT NULL,
-    `tag_id` int NOT NULL,
-    PRIMARY KEY (`post_id`,`tag_id`),
-    CONSTRAINT `post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE,
-    CONSTRAINT `tag_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS `post_tag` (
+  `post_id` int NOT NULL,
+  `tag_id` int NOT NULL,
+  PRIMARY KEY (`post_id`, `tag_id`),
+  CONSTRAINT `post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE,
+  CONSTRAINT `tag_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE
 )
+CREATE TABLE IF NOT EXISTS `likes` (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_like (user_id, post_id),
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (post_id) REFERENCES post(post_id)
+);
