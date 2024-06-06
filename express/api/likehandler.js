@@ -22,38 +22,21 @@ router.post('/post/:postId/like', (req, res) => {
         FROM post 
         WHERE post_id = ?
     `;
-
-   
-    db.beginTransaction((err) => {
+    db.query(updateLikeQuery, [postId], (err, updateResults) => {
         if (err) {
-            res.status(500).json({ success: false, message: 'Database transaction failed' });
+            console.error('Error updating like count: ', err);
+            res.status(500).json({ success: false, message: 'Error updating like count' });
             return;
         }
 
-        db.query(updateLikeQuery, [postId], (err, results) => {
+        db.query(getLikeQuery, [postId], (err, likeResults) => {
             if (err) {
-                return db.rollback(() => {
-                    res.status(500).json({ success: false, message: 'Database update failed' });
-                });
+                console.error('Error fetching like count: ', err);
+                res.status(500).json({ success: false, message: 'Error fetching like count' });
+                return;
             }
 
-            db.query(getLikeQuery, [postId], (err, results) => {
-                if (err) {
-                    return db.rollback(() => {
-                        res.status(500).json({ success: false, message: 'Database query failed' });
-                    });
-                }
-
-                db.commit((err) => {
-                    if (err) {
-                        return db.rollback(() => {
-                            res.status(500).json({ success: false, message: 'Database commit failed' });
-                        });
-                    }
-
-                    res.status(200).json({ success: true, like_count: results[0].like_tag });
-                });
-            });
+            res.status(200).json({ success: true, like_count: likeResults[0].like_tag });
         });
     });
 });
