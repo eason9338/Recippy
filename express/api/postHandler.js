@@ -3,6 +3,7 @@ import db from '../config/db.js';
 
 const router = Router();
 
+// Keyword search api
 router.get('/search', (req, res) => {
     const keyword = req.query.q;
 
@@ -61,7 +62,7 @@ router.get('/search', (req, res) => {
     });
 });
 
-
+// get post api
 router.get('/posts', (req, res) => {
     const userId = req.query.userId;
 
@@ -116,7 +117,7 @@ router.get('/posts', (req, res) => {
     });
 });
 
-
+// post - post
 router.post('/post', async (req, res) => {
     const { title, content, selectedTags, selectedImg, user_id } = req.body;
 
@@ -138,6 +139,7 @@ router.post('/post', async (req, res) => {
     }
 });
 
+// Tags search api
 router.post('/searchByTags', async (req, res) => {
     const { tags } = req.body; 
 
@@ -147,33 +149,26 @@ router.post('/searchByTags', async (req, res) => {
     }
 
     try {
-
+        // 用于標籤匹配的查詢
         const tagQuery = `
         SELECT 
-            post.post_id, 
-            post.title AS post_title, 
-            post.content AS post_content, 
-            user.user_name,
-            (
-                SELECT GROUP_CONCAT(t.tag_name SEPARATOR ', ')
-                FROM post_tag pt
-                JOIN tag t ON pt.tag_id = t.tag_id
-                WHERE pt.post_id = post.post_id
-            ) AS tags
-        FROM post
-        JOIN user ON post.user_id = user.user_id
-        JOIN post_tag pt ON pt.post_id = post.post_id
+            p.post_id, 
+            p.title AS post_title, 
+            p.content AS post_content, 
+            u.user_name,
+            GROUP_CONCAT(t.tag_name SEPARATOR ', ') AS post_tags
+        FROM post p
+        JOIN user u ON p.user_id = u.user_id
+        JOIN post_tag pt ON pt.post_id = p.post_id
         JOIN tag t ON pt.tag_id = t.tag_id
         WHERE t.tag_name IN (?)
-        GROUP BY post.post_id
-    
+        GROUP BY p.post_id
+        HAVING COUNT(DISTINCT t.tag_name) = ?
         `;
 
-        const [results, fields] = await db.promise().query(tagQuery, [tags.join(',')]);
+        const [results] = await db.promise().query(tagQuery, [tags, tags.length]);
 
         if (results.length > 0) {
-            console.log(results.length);
-            console.log('results: ', results);
             const posts = results.map(post => ({
                 id: post.post_id,
                 title: post.post_title,
@@ -182,15 +177,16 @@ router.post('/searchByTags', async (req, res) => {
             }));
             res.status(200).json({ success: true, posts });
         } else {
-            res.status(200).json({ success: false, message: 'No posts found with the provided tags', posts: []});
+            res.status(200).json({ success: false, message: 'No posts found with the provided tags', posts: [] });
         }
     } catch (err) {
         console.error('Error fetching posts by tags: ', err);
         res.status(500).send('Server error');
-    
     }
 });
 
+
+// Content API
 router.get('/post/:post_id', async (req, res) => {
     const post_id = req.params.post_id;
 

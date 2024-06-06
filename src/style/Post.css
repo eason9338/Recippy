@@ -16,7 +16,7 @@ h2 {
 }
 
 .post {
-    position: relative;
+    /*position: relative;*/
     padding: 30px;
     border-bottom: 1px solid #f2f2f2;
     background-color: rgb(245, 245, 245);

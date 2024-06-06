@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+.post {
+    position: relative;
+    padding: 20px;
+    margin: 30px;
+    border-radius: 20px;
+    background-color: rgb(245, 245, 245);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 840px;
+    height: fit-content;
+}
+
+.post-info {
+    display: flex;
+    gap: 10px;
+}
+
+.poster-pic {
+    background-color: orange;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+}
+
+.poster-name {
+    font-size: 20px;
+}
+
+.post-title {
+    margin-bottom: 10px;
+}
+
+
+.post-content {
+    margin-bottom: 20px;
+}
+
+.tag {
+    background-color: rbg(225, 225, 225);
+    border-radius: 30px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 10px;
+    margin-right: 5px;
+    font-size: 15px;
+}
+
+
+.interaction {
+    background: none;
+    border: none;
+    display: flex;
+    padding-top: 15px;
+}
+
+.like-button, .share-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline;
+    align-items: baseline;
+    margin-right: 10px;
+}
+
+.like-button.liked {
+    color: rgb(205, 82, 82);
+}
+
+.share-button.shared {
+    color: rgb(54, 103, 188);
+}
+
+.like_num, .share_num {
+    color: rgb(174, 174, 174);
+    display: inline;
+    align-items: baseline;
+    margin: 10px;
+}
+
