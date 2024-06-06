@@ -38,9 +38,21 @@ const Home = () => {
         console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
-    const likeClick = () => {
-        setLikes(likes + 1);
-      };
+    const likeClick = async (post_id) => {
+        const response = await fetch('http://localhost:8000/api/post/like', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(post_id)
+        })
+        
+        const data = await response.json();
+        if(data.success) {
+            setLikes(likes + 1);
+            console.log("likes:",likes)
+        } else {
+            console.error('like update failed');
+        }
+    };
 
 
     const handleTagClick = (tag) => {
@@ -72,7 +84,7 @@ const Home = () => {
                                     <span className='tag' key={index}>{tag}</span>
                                 ))}
                                 <div class="button">
-                                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                                    <FontAwesomeIcon icon={faHeart}onClick={() => likeClick(post.id)}  className="like-icon" /> {likes} 
                                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                 </div>

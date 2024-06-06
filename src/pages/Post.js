@@ -14,11 +14,12 @@ const PostDetail = () => {
     const[isLiked, setIsLiked] = useState(false);
     const[isShared, setIsShared] = useState(false);
 
-    const handleLike = () => {
+    const handleLike = async(post_id) => {
         if(!isLiked) {
             setLikeCount(likeCount + 1);
             setIsLiked(true);
         }
+        
     };
 
     const handleShare = () => {
@@ -71,12 +72,12 @@ const PostDetail = () => {
                  
                 <div className='interaction'>
                     <button className={`like-button ${isLiked ? 'liked' : ''}`} onClick = {handleLike} disabled={isLiked}>
-                        <FontAwesomeIcon icon={faHeart}/>
+                        <FontAwesomeIcon icon={faHeart}  className="like-icon" />
                         <p className='like_num'>{likeCount ? likeCount : 0}</p>
                     </button>
-                    <button className={`share-button ${isShared ? 'shared' : ''}`} onClick={handleShare} disabled={isShared}>
-                        <FontAwesomeIcon icon={faShare} />
-                        <p className='share_num'>{shareCount}</p>
+                    <button className={`share-button ${isShared ? 'shared' : ''}`} onClick = {handleLike} disabled={isShared}>
+                        <FontAwesomeIcon icon={faShare} className="comment-icon" />
+                        {/* <p className='share_num'>{shareCount}</p> */}
                     </button>
                 </div>         
             </div>
