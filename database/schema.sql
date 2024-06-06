@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `post_tag` (
   PRIMARY KEY (`post_id`, `tag_id`),
   CONSTRAINT `post_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE,
   CONSTRAINT `tag_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE
-)
+);
 CREATE TABLE IF NOT EXISTS `likes` (
     like_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,

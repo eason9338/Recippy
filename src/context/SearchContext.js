@@ -56,11 +56,11 @@ export const SearchProvider = ({ children }) => {
             const data = await response.json();
             if (data.success) {
                 const newPosts = data.posts.map(post => ({
-                    post_title: post.post_title,
-                    post_content: post.post_content,
-                    post_tags: post.post_tags,
-                    id: post.post_id,
-                    user_name: post.user_name
+                    title: post.title,
+                    content: post.content,
+                    tags: post.tags,
+                    id: post.id,
+                    name: post.name
                 }));
                 setResults(newPosts);
                 console.log(results);  

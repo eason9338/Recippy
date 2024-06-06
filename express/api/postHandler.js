@@ -46,13 +46,13 @@ router.get('/search', (req, res) => {
             }
 
             const posts = searchResults.map(post => ({
-                post_id: post.post_id,
-                post_title: post.post_title,
-                post_content: post.post_content,
-                post_tags: tagResults
+                id: post.post_id,
+                title: post.post_title,
+                content: post.post_content,
+                tags: tagResults
                     .filter(tag => tag.post_id === post.post_id)
                     .map(tag => tag.tag_name),
-                user_name: post.user_name,
+                name: post.user_name,
                 post_img: post.url_string
             }));
 
@@ -102,13 +102,13 @@ router.get('/posts', (req, res) => {
 
             const posts = postResults.map(post => {
                 return {
-                    post_id: post.post_id,
-                    post_title: post.post_title,
-                    post_content: post.post_content,
-                    post_tags: tagResults
+                    id: post.post_id,
+                    title: post.post_title,
+                    content: post.post_content,
+                    tags: tagResults
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
-                    user_name: post.user_name
+                    name: post.user_name
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
@@ -175,10 +175,10 @@ router.post('/searchByTags', async (req, res) => {
             console.log(results.length);
             console.log('results: ', results);
             const posts = results.map(post => ({
-                post_id: post.post_id,
-                post_title: post.post_title,
-                post_content: post.post_content,
-                user_name: post.user_name
+                id: post.post_id,
+                title: post.post_title,
+                content: post.post_content,
+                name: post.user_name
             }));
             res.status(200).json({ success: true, posts });
         } else {
