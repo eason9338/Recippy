@@ -1,12 +1,13 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
+import Swal from 'sweetalert2';
 import '../style/Sign-up.css'
 
 const Signup = () => {
 
-    const [userName, setUserName] = useState('')
-    const [userEmail, setUserEmail] = useState('')
-    const [userPassword, setUserPassword] = useState('')
+    const [userName, setUserName] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const [userPassword, setUserPassword] = useState('');
 
     const navigate = useNavigate()
 
@@ -29,10 +30,25 @@ const Signup = () => {
         const data = await response.json();
         if(data.success) { 
             console.log("註冊成功");
-            navigate('/login');
+            //localStorage.setItem("user", JSON.stringify(data.user));
+            //setUser(data.user);
+            Swal.fire({
+                icon: 'success',
+                title: '註冊成功',
+                text: '你已註冊成功！',
+            }).then(() => {
+                navigate('/login');
+            });
         }
-        else { console.error("註冊失敗", data.message) }
-    }
+        else { 
+            console.error("註冊失敗", data.message);
+            Swal.fire({
+                icon: 'error',
+                title: '註冊失敗',
+                text: data.message,
+            });
+        }
+    };
 
     return ( 
         <div className="sign-up-container">
