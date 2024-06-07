@@ -38,11 +38,12 @@ export const SearchProvider = ({ children }) => {
                     body: JSON.stringify({ tags }),
                 });
                 const data = await response.json();
+                console.log('SearchByTags response:', data); // 調試用，查看返回的數據
                 if (data.success) {
-                    setResults(data.results); // 更新搜尋結果
+                    setResults(data.posts); // 更新搜尋結果，確保鍵名正確
                 } else {
-                    // console.error('Tag search failed:', data.message);
-                    getPostList(user.user_id)
+                    console.error('Tag search failed:', data.message);
+                    getPostList(user.user_id);
                 }
             } catch (error) {
                 console.error('Error during tag search:', error);
@@ -56,11 +57,11 @@ export const SearchProvider = ({ children }) => {
             const data = await response.json();
             if (data.success) {
                 const newPosts = data.posts.map(post => ({
-                    post_title: post.post_title,
-                    post_content: post.post_content,
-                    post_tags: post.post_tags,
-                    id: post.post_id,
-                    user_name: post.user_name
+                    title: post.title,
+                    content: post.content,
+                    tags: post.tags,
+                    id: post.id,
+                    name: post.name
                 }));
                 setResults(newPosts);
                 console.log(results);  

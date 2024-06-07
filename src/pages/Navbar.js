@@ -42,11 +42,12 @@ const Navbar = () => {
                     </div>
 
                     <form className='search-bar' onSubmit={handleSearchSubmit}>
-                        <input
+                        <input 
                             type="text"
                             placeholder="請輸入菜名"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
+                            style={{ fontSize: '16px' }}
                         />
                         <button type='submit' className='search_icon'>
                             <FontAwesomeIcon icon={faMagnifyingGlass} />

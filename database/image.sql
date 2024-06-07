@@ -1,5 +1,4 @@
 CREATE TABLE IF NOT EXISTS `image` (
-  `image_id` int NOT NULL AUTO_INCREMENT,
-  `image` longblob,
-  PRIMARY KEY (`image_id`)
-)
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  url_string VARCHAR(255) NOT NULL
+);

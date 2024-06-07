@@ -6,6 +6,14 @@ h2 {
     align-items: center;
     margin-bottom: 30px;
 }
+.post-title{
+    margin-top: 3px;
+    font-size: 20px;
+}
+.post-content{
+    margin: 6px;
+    line-height: 1.5;
+}
 
 .post {
     /*position: relative;*/
@@ -13,12 +21,14 @@ h2 {
     border-bottom: 1px solid #f2f2f2;
     background-color: rgb(245, 245, 245);
     box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
-    height: 150px;
+    /* height: 150px; */
     width: 840px;
     border-radius: 20px;
     margin-bottom: 30px;
 }
-
+.post_inside{
+    padding: 10px;
+}
 /*.post-inside{
     justify-content: center;
     align-items: center;
@@ -53,6 +63,47 @@ h2 {
 
 .poster-name {
     font-size: 20px;
+}
+
+.tag{
+    background-color: #400263;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 5px;
+    display:inline-block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+.tag :hover{
+    transform: scale(1.3);
+}
+.button {
+    display: flex;
+    gap: 10px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer; 
+    align-items: center;
+    margin-top: 10px;
+}
+
+.like-icon :hover {
+    color: red;
+  }
+.comment-icon :hover{
+    color: rgb(220, 160, 0)
+}
+.line＿icon{
+    transition: transform 0.3s, background-color 0.3s;
+    cursor: pointer;
+    font-size: 24px;
+}
+.line＿icon :hover {
+    color: #a40431;
+    /* color: red; */
+    transform: scale(1.1);
 }
 
 .post-title {
