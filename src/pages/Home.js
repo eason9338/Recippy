@@ -96,6 +96,12 @@ const Home = () => {
                                 style={{ maxWidth: '300px', maxHeight: 'auto' ,borderRadius: '10px'}} 
                             />
                             </div>
+                            <h3 className='post-title'>{post.post_title}</h3>
+                            {post.post_tags && post.post_tags.map((tag, index) => (
+                                <span className='tag' key={index}># {tag}</span>
+                            ))}
+                            <p className="post-content">{post.post_content}</p>
+
                         </div>
                     </div>
                 ))

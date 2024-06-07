@@ -68,7 +68,7 @@
     display: inline;
     align-items: baseline;
     margin-right: 10px;
-    transform: scale(1.5);
+    color: rgb(174, 174, 174);
 }
 
 .like-button.liked {
@@ -80,7 +80,7 @@
 }
 
 .like_num, .share_num {
-    color: rgb(174, 174, 174);
+    color: rgb(57, 57, 57);
     display: inline;
     align-items: baseline;
     margin: 10px;

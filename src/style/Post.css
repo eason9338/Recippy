@@ -107,6 +107,7 @@ h2 {
 }
 
 .post-title {
+    margin-top: 5px;
     margin-bottom: 5px;
 }
 
@@ -114,3 +115,13 @@ h2 {
     margin-top: 5px;
 }
 
+.tag {
+    background-color: rgb(225, 225, 225);
+    border-radius: 30px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

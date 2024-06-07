@@ -100,13 +100,13 @@ const Create = () => {
                         onChange={(e) => setTitle(e.target.value)}
                     ></input>
                     <p>內容</p>
-                    <input className='content'
+                    <textarea
                         type="text"
                         required
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        
-                    ></input>
+                    ></textarea>
+                    <p>標籤</p>
 {/*                    
                     <input 
                         type="file"
