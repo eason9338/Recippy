@@ -38,38 +38,31 @@ const Home = () => {
         console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
-    const likeClick = async (post_id) => {
-        const response = await fetch('http://localhost:8000/api/post/like', {
-            method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(post_id)
-        })
-        
-        const data = await response.json();
-        if(data.success) {
-            setLikes(likes + 1);
-            console.log("likes:",likes)
-        } else {
-            console.error('like update failed');
-        }
-    };
+    // useEffect(() =>{
+    //     const fetchLikeCount = async () => {
 
-
-    const handleTagClick = (tag) => {
-        setSelectedTags(prevTags => {
-            if (prevTags.includes(tag)) {
-                return prevTags.filter(t => t !== tag);
-            } else {
-                return [...prevTags, tag];
-            }
-        });
-    };
+    //         try {
+    //             const response = await fetch(`http://localhost:8000/api/post/like-status/${post_id}/${user.user_id}`);
+                
+    //             const data = await response.json();
+    //             if(data.success) {
+    //                 setLikes(data.like_tag || 0);
+    //             } else {
+    //                 console.error('文章讀取失敗', data.message);
+    //             }
+    //         } catch (error) {
+    //             console.error('網絡錯誤或伺服器問題', error);
+    //         }
+    //     };
+    //     fetchLikeCount();
+    // }, [post_id]);
 
     return (
         <div>
             {Array.isArray(results) && results.length > 0 ? (
                 results.map((post, index) => (
                     <div key={index} className="post" onClick={() => handlePostClick(post.id)}>
+
                         <div style={{ display: 'flex' }}>
                             <div className="post_inside"  style={{  flex: 7,justifyContent: 'space-between' }}>
                                 <div className='poster-info'>
@@ -84,7 +77,7 @@ const Home = () => {
                                     <span className='tag' key={index}>{tag}</span>
                                 ))}
                                 <div class="button">
-                                    <FontAwesomeIcon icon={faHeart}onClick={() => likeClick(post.id)}  className="like-icon" /> {likes} 
+                                    <FontAwesomeIcon icon={faHeart} className="like-icon" /> {post.likeCount} 
                                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                 </div>
