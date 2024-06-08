@@ -63,18 +63,17 @@ router.get('/search', (req, res) => {
     });
 });
 
-// get personal page post api 1
+// get personal page post api
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id,  image.url_string AS img_url, 
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, 
         COUNT(user_like.user_id) AS like_count
         FROM post
         JOIN user ON post.user_id = user.user_id
         LEFT JOIN user_like ON post.post_id = user_like.post_id
-        left join image on image.image_id = post.image_id
         WHERE post.user_id = ?
         GROUP BY post.post_id
     `;
@@ -116,8 +115,7 @@ router.get('/homePost', (req, res) => {
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
                     name: post.user_name,
-                    like_count: post.like_count,
-                    img_url: post.img_url
+                    like_count: post.like_count
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
@@ -145,11 +143,10 @@ router.delete('/delete_Post/:post_id', (req, res) => {
 });
 
 // edit post
+// edit post
 router.put('/updatePost/:post_id', (req, res) => {
-    const postId = req.params.post_id;
+    const postId = req.params.post_id;  // 修正這行：從 req.params.post_id 而不是 req.params.editPostId 取值
     const { title, content, tags } = req.body;
-
-    console.log(`Updating post ${postId} with title: ${title}, content: ${content}, tags: ${tags}`);
 
     const updatePostQuery = `
         UPDATE post
@@ -162,24 +159,47 @@ router.put('/updatePost/:post_id', (req, res) => {
             console.error('Error updating post: ', err);
             res.status(500).send('Server error');
             return;
-        } else {
-            console.log(`Tags for post ${postId} updated successfully`);
-            res.status(200).json({ success: true, message: 'Post updated' });
         }
+
+        const deleteTagsQuery = `
+            DELETE FROM post_tag WHERE post_id = ?
+        `;
+
+        db.query(deleteTagsQuery, [postId], (err, result) => {
+            if (err) {
+                console.error('Error deleting tags: ', err);
+                res.status(500).send('Server error');
+                return;
+            }
+
+            const insertTagsQuery = `
+                INSERT INTO post_tag (post_id, tag_id) VALUES (?, ?)
+            `;
+            const tagPromises = tags.map(tag => db.promise().query(insertTagsQuery, [postId, tag.value]));
+
+            Promise.all(tagPromises)
+                .then(() => {
+                    res.status(200).json({ success: true, message: 'Post updated' });
+                })
+                .catch(error => {
+                    console.error('Error inserting tags: ', error);
+                    res.status(500).send('Server error');
+                });
+        });
     });
 });
+
 
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, image.url_string AS img_url, 
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, 
         COUNT(user_like.user_id) AS like_count
         FROM post
         JOIN user ON post.user_id = user.user_id
         LEFT JOIN user_like ON post.post_id = user_like.post_id
-        left join image on image.image_id = post.image_id
         WHERE post.user_id = ?
         GROUP BY post.post_id
     `;
@@ -198,12 +218,12 @@ router.get('/homePost', (req, res) => {
             return;
         }
 
-    const tagQuery = `
-        SELECT pt.post_id, t.tag_name
-        FROM post_tag pt
-        JOIN tag t ON pt.tag_id = t.tag_id
-        WHERE pt.post_id IN (?)
-    `;
+        const tagQuery = `
+            SELECT pt.post_id, t.tag_name
+            FROM post_tag pt
+            JOIN tag t ON pt.tag_id = t.tag_id
+            WHERE pt.post_id IN (?)
+        `;
 
         db.query(tagQuery, [postIds], (err, tagResults) => {
             if (err) {
@@ -221,8 +241,7 @@ router.get('/homePost', (req, res) => {
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
                     name: post.user_name,
-                    like_count: post.like_count,
-                    img_url: post.img_url
+                    like_count: post.like_count
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
@@ -339,13 +358,11 @@ router.post('/searchByTags', async (req, res) => {
             p.title AS post_title, 
             p.content AS post_content, 
             u.user_name,
-            i.img_url
             GROUP_CONCAT(t.tag_name SEPARATOR ', ') AS post_tags
         FROM post p
         JOIN user u ON p.user_id = u.user_id
         JOIN post_tag pt ON pt.post_id = p.post_id
         JOIN tag t ON pt.tag_id = t.tag_id
-        JOIN image i ON post.image_id = i.image_id
         WHERE t.tag_name IN (?)
         GROUP BY p.post_id
         HAVING COUNT(DISTINCT t.tag_name) = ?
@@ -358,8 +375,7 @@ router.post('/searchByTags', async (req, res) => {
                 id: post.post_id,
                 title: post.post_title,
                 content: post.post_content,
-                name: post.user_name,
-                img_url: post.img_url
+                name: post.user_name
             }));
             res.status(200).json({ success: true, posts });
         } else {
@@ -379,10 +395,9 @@ router.get('/post/:post_id', async (req, res) => {
     console.log('postId: ', post_id);
     try {
         const postQuery = `
-            SELECT post.post_id, post.title AS post_title, post.content AS post_content, post.like_tag, post.share_tag, user.user_name, post.post_id, image.url_string
+            SELECT post.post_id, post.title AS post_title, post.content AS post_content, post.like_tag, post.share_tag, user.user_name
             FROM post
             JOIN user ON post.user_id = user.user_id
-            join image on post.image_id = image.image_id
             WHERE post.post_id = ?
         `;
 
@@ -411,7 +426,6 @@ router.get('/post/:post_id', async (req, res) => {
             name: post.user_name,
             share_tag: post.share_tag,
             like_tag: post.like_tag,
-            img_url: post.url_string,
             tags: tagResults.map(tag => tag.tag_name)
         }});
     } catch (err) {
