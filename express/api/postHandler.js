@@ -13,6 +13,7 @@ router.get('/search', (req, res) => {
     }
 
     const searchQuery = `
+    
         SELECT p.post_id, p.title AS post_title, p.content AS post_content, u.user_name
         FROM post p
         JOIN user u ON p.user_id = u.user_id
@@ -129,9 +130,22 @@ router.get('/posts', (req, res) => {
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, post.like_tag
-        FROM post
-        JOIN user ON post.user_id = user.user_id
+
+
+        SELECT 
+            post.post_id, 
+            post.user_id, 
+            post.title AS post_title, 
+            post.content AS post_content, 
+            user.user_name, 
+            post.like_tag, 
+            image.url_string AS img_url
+        FROM 
+            post
+        JOIN 
+            user ON post.user_id = user.user_id
+        LEFT JOIN 
+            image ON post.image_id = image.image_id
     `;
 
     db.query(postQuery, [userId], (err, postResults) => {
@@ -148,12 +162,12 @@ router.get('/posts', (req, res) => {
             return;
         }
 
-        const tagQuery = `
-            SELECT pt.post_id, t.tag_name
-            FROM post_tag pt
-            JOIN tag t ON pt.tag_id = t.tag_id
-            WHERE pt.post_id IN (?)
-        `;
+    const tagQuery = `
+        SELECT pt.post_id, t.tag_name
+        FROM post_tag pt
+        JOIN tag t ON pt.tag_id = t.tag_id
+        WHERE pt.post_id IN (?)
+    `;
 
         db.query(tagQuery, [postIds], (err, tagResults) => {
             if (err) {
@@ -170,8 +184,9 @@ router.get('/posts', (req, res) => {
                     tags: tagResults
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
-                    name: post.user_name,
-                    like_tag: post.like_tag
+                    like_tag: post.like_tag,
+                    img_url: post.img_url,
+                    name: post.user_name
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
