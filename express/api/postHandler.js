@@ -143,9 +143,11 @@ router.delete('/delete_Post/:post_id', (req, res) => {
 });
 
 // edit post
-router.put('/updatePost/:editPostId', (req, res) => {
+router.put('/updatePost/:post_id', (req, res) => {
     const postId = req.params.post_id;
     const { title, content, tags } = req.body;
+
+    console.log(`Updating post ${postId} with title: ${title}, content: ${content}, tags: ${tags}`);
 
     const updatePostQuery = `
         UPDATE post
@@ -159,6 +161,8 @@ router.put('/updatePost/:editPostId', (req, res) => {
             res.status(500).send('Server error');
             return;
         }
+
+        console.log(`Post ${postId} updated, now updating tags`);
 
         const deleteTagsQuery = `
             DELETE FROM post_tag WHERE post_id = ?
@@ -178,6 +182,7 @@ router.put('/updatePost/:editPostId', (req, res) => {
 
             Promise.all(tagPromises)
                 .then(() => {
+                    console.log(`Tags for post ${postId} updated successfully`);
                     res.status(200).json({ success: true, message: 'Post updated' });
                 })
                 .catch(error => {
@@ -187,6 +192,7 @@ router.put('/updatePost/:editPostId', (req, res) => {
         });
     });
 });
+
 
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
