@@ -77,14 +77,14 @@ const Home = () => {
                                     <span className='tag' key={index}>{tag}</span>
                                 ))}
                                 <div class="button">
-                                    <FontAwesomeIcon icon={faHeart} className="like-icon" /> {post.likeCount} 
+                                    <FontAwesomeIcon icon={faHeart} className="home-love" /> {post.likeCount} 
                                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                 </div>
                             </div>
                             <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center'}}>
                             <img 
-                                src={post.img_url}
+                                src={post.img_url} 
                                 alt="Image" 
                                 style={{ maxWidth: '300px', maxHeight: 'auto' ,borderRadius: '10px'}} 
                             />

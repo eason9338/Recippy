@@ -13,6 +13,7 @@ router.get('/search', (req, res) => {
     }
 
     const searchQuery = `
+    
         SELECT p.post_id, p.title AS post_title, p.content AS post_content, u.user_name
         FROM post p
         JOIN user u ON p.user_id = u.user_id
@@ -122,13 +123,37 @@ router.get('/homePost', (req, res) => {
     });
 });
 
+// delete personal post api
+router.delete('/delete_Post/:post_id', (req, res) => {
+    const postId = req.params.post_id;
 
-// get home page post api
-router.get('/posts', (req, res) => {
+    const deletePostQuery = `
+        DELETE FROM post WHERE post_id = ?
+    `;
+
+    db.query(deletePostQuery, [postId], (err, result) => {
+        if (err) {
+            console.error('Error deleting post: ', err);
+            res.status(500).send('Server error');
+            return;
+        }
+
+        res.status(200).json({ success: true, message: 'Post deleted' });
+    });
+});
+
+router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
     // Acquired every post with user name
     const postQuery = `
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, 
+        COUNT(user_like.user_id) AS like_count
+        FROM post
+        JOIN user ON post.user_id = user.user_id
+        LEFT JOIN user_like ON post.post_id = user_like.post_id
+        WHERE post.user_id = ?
+        GROUP BY post.post_id
                SELECT 
             post.post_id, 
             post.user_id, 
@@ -159,12 +184,12 @@ router.get('/posts', (req, res) => {
             return;
         }
 
-        const tagQuery = `
-            SELECT pt.post_id, t.tag_name
-            FROM post_tag pt
-            JOIN tag t ON pt.tag_id = t.tag_id
-            WHERE pt.post_id IN (?)
-        `;
+    const tagQuery = `
+        SELECT pt.post_id, t.tag_name
+        FROM post_tag pt
+        JOIN tag t ON pt.tag_id = t.tag_id
+        WHERE pt.post_id IN (?)
+    `;
 
         db.query(tagQuery, [postIds], (err, tagResults) => {
             if (err) {
@@ -181,6 +206,78 @@ router.get('/posts', (req, res) => {
                     tags: tagResults
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
+                    name: post.user_name,
+                    like_count: post.like_count
+                };
+            });
+            res.status(200).json({ success: true, posts, message: 'Posts fetched' });
+        });
+    });
+});
+
+// get home page post api
+router.get('/posts', (req, res) => {
+    const userId = req.query.userId;
+
+    // Acquired every post with user name
+    const postQuery = `
+
+
+        SELECT 
+            post.post_id, 
+            post.user_id, 
+            post.title AS post_title, 
+            post.content AS post_content, 
+            user.user_name, 
+            post.like_tag, 
+            image.url_string AS img_url
+        FROM 
+            post
+        JOIN 
+            user ON post.user_id = user.user_id
+        LEFT JOIN 
+            image ON post.image_id = image.image_id
+    `;
+
+    db.query(postQuery, [userId], (err, postResults) => {
+        if (err) {
+            console.error('Error fetching posts: ', err);
+            res.status(500).send('Server error');
+            return;
+        }
+
+        // Dealing with tags 
+        const postIds = postResults.map(post => post.post_id);
+        if (postIds.length === 0) {
+            res.json({ posts: [] });
+            return;
+        }
+
+    const tagQuery = `
+        SELECT pt.post_id, t.tag_name
+        FROM post_tag pt
+        JOIN tag t ON pt.tag_id = t.tag_id
+        WHERE pt.post_id IN (?)
+    `;
+
+        db.query(tagQuery, [postIds], (err, tagResults) => {
+            if (err) {
+                console.error('Error fetching tags: ', err);
+                res.status(500).send('Server error');
+                return;
+            }
+
+            const posts = postResults.map(post => {
+                return {
+                    id: post.post_id,
+                    title: post.post_title,
+                    content: post.post_content,
+                    tags: tagResults
+                        .filter(tag => tag.post_id === post.post_id)
+                        .map(tag => tag.tag_name),
+                    like_tag: post.like_tag,
+                    img_url: post.img_url,
+                    name: post.user_name
                     name: post.user_name,
                     img_url: post.img_url
                 };

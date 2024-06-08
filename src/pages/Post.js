@@ -3,9 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faShare } from '@fortawesome/free-solid-svg-icons';
 import '../style/clickPost.css';
-import Swal from 'sweetalert2';
 import { faComment} from '@fortawesome/free-solid-svg-icons'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useUser } from '../context/UserContext.js';
 
 const PostDetail = () => {
@@ -78,18 +76,6 @@ const PostDetail = () => {
         fetchPostData();
     }, [post_id]);
 
-    useEffect(() => {
-        const handleDocumentClick = (event) => {
-            if (showMenu) {
-                setShowMenu(false);
-            }
-        };
-
-        document.addEventListener('click', handleDocumentClick);
-        return () => {
-            document.removeEventListener('click', handleDocumentClick);
-        };
-    }, [showMenu]);
     // const handleLike = async () => {
     //     try {
     //         const response = await fetch(`http://localhost:8000/api/post/${post_id}/like-status`, {
@@ -134,7 +120,7 @@ const PostDetail = () => {
     }
 
     return (
-        <div onContextMenu={handleContextMenu} onClick={handleClick}>
+        <div>
             <div className='post'>
                 <div className='post-info'>
                     <div className='poster-pic'>
@@ -148,25 +134,11 @@ const PostDetail = () => {
                 {post.tags && post.tags.map((tag, index) => (
                     <span className='tag' key={index}># {tag}</span>
                 ))}   
-                 
-                 <p className='post-content'>{post.like_tag}</p>
                 <div class="button">
-                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                    <FontAwesomeIcon icon={faHeart} onClick={likeClick} className={`like-icon ${hasLiked ? 'liked' : ''}`}  /> {likes} 
                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                 </div>  
-            </div>
-
-            <div className={`context-menu ${showMenu ? 'show' : ''}`}
-                style={{
-                    top: yPos,
-                    left: xPos
-                }}
-            >
-                <ul className='menu-list'>
-                    <li className='menu-item' onClick={() => handleMenuClick('Edit')}>Edit Post</li>
-                    <li className='menu-item' onClick={() => handleMenuClick('Delete')}>Delete Post</li>
-                </ul>
             </div>
         </div>
     );
