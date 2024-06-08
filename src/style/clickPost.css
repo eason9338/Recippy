@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@200..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
 .post {
-    position: relative;
+    /* position: flex; */
     padding: 20px;
     margin: 30px;
     border-radius: 20px;
@@ -51,6 +51,7 @@
     margin-top: 10px;
     margin-right: 5px;
     font-size: 15px;
+    /* display: inline-block; */
 }
 
 
