@@ -191,7 +191,6 @@ const User = () => {
                     }) : <p>No posts available</p>
                 }
             </div>
-            <button onClick={logout}>Log out</button>
         </div>
     );
 }
