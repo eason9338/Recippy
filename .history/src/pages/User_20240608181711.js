@@ -41,6 +41,7 @@ const User = () => {
             setEditPostId(post_id.id);
             setEditContent({ title: post_id.title, content: post_id.content, tags: post_id.tags });
             Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
+            updatePost()
         }
     };
 
@@ -68,33 +69,33 @@ const User = () => {
     };
 
     const updatePost = async () => {
-        try {
-            const response = await fetch(`http://localhost:8000/api/updatePost/${editPostId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`
-                },
-                body: JSON.stringify({
-                    title: editContent.title,
-                    content: editContent.content,
-                    tags: editContent.tags
-                })
-            });
+    try {
+        const response = await fetch(`http://localhost:8000/api/updatePost/${editPostId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
+            },
+            body: JSON.stringify({
+                title: editContent.title,
+                content: editContent.content,
+                tags: editContent.tags
+            })
+        });
 
-            const data = await response.json();
-            if (data.success) {
-                Swal.fire('更新成功', '文章已更新', 'success');
-                setPosts(posts.map(post => post.id === editPostId ? { ...post, ...editContent } : post)); // 更新狀態
-                setEditPostId(null); // 清除編輯狀態
-            } else {
-                Swal.fire('更新失敗', '無法更新文章', 'error');
-            }
-        } catch (error) {
-            console.error('Error updating post:', error);
-            Swal.fire('更新失敗', '伺服器錯誤', 'error');
+        const data = await response.json();
+        if (data.success) {
+            Swal.fire('更新成功', '文章已更新', 'success');
+            setPosts(posts.map(post => post.id === editPostId ? { ...post, ...editContent } : post)); // 更新狀態
+            setEditPostId(null); // 清除編輯狀態
+        } else {
+            Swal.fire('更新失敗', '無法更新文章', 'error');
         }
-    };
+    } catch (error) {
+        console.error('Error updating post:', error);
+        //Swal.fire('更新失敗', '伺服器錯誤', 'error');
+    }
+};
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -112,22 +113,13 @@ const User = () => {
         fetchPosts();
     }, [user]);
 
+    const likeClick = () => {
+        setLikes(likes + 1);
+    };
 
     return (
         <div>
             <h2 className={displayName ? '' : 'hide'}>Hello {displayName}, this is your personal page</h2>
-            <div>
-                <h3>Personal Info</h3>
-                <div className='name-info'>
-                    <p>Name: {user.user_name}</p>
-                    <button className='modify-info-button'>修改</button>
-                </div>
-                <div className='email-info'>
-                    <p>Email: {user.user_email}</p>
-                    <button className='modify-info-button'>修改</button>
-                </div>
-                <hr class="solid"></hr>
-            </div>
             <div>
                 {
                     posts.length > 0 ? posts.map((post, index) => {
@@ -148,8 +140,8 @@ const User = () => {
                                                 <h3 className='post-title'>{post.title}</h3>
                                             )}
                                             <div className='icon-container'>
-                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post.id)} />
-                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post.id)} />
+                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post)} />
+                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post)} />
                                             </div>
                                         </div>
                                         {isEditing ? (
@@ -167,7 +159,7 @@ const User = () => {
                                             })}
                                         </div>
                                         <div className="button">
-                                            <FontAwesomeIcon icon={faHeart}  className="like-icon" /> {likes}
+                                            <FontAwesomeIcon icon={faHeart} onClick={likeClick} className="like-icon" /> {likes}
                                             <FontAwesomeIcon icon={faComment} className="comment-icon" />
                                             <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                         </div>
@@ -180,7 +172,7 @@ const User = () => {
                                     </div>
                                     <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center' }}>
                                         <img
-                                            src={post.img_url}
+                                            src={post.url_string}
                                             alt="Image"
                                             style={{ maxWidth: '300px', maxHeight: 'auto', borderRadius: '10px' }}
                                         />
@@ -191,6 +183,7 @@ const User = () => {
                     }) : <p>No posts available</p>
                 }
             </div>
+            <button onClick={logout}>Log out</button>
         </div>
     );
 }
