@@ -109,12 +109,8 @@ router.get('/posts', (req, res) => {
                     tags: tagResults
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
-<<<<<<< HEAD
                     name: post.user_name,
                     like_tag: post.like_tag
-=======
-                    name: post.user_name
->>>>>>> main
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
