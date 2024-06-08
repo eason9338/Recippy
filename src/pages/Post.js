@@ -121,27 +121,40 @@ const PostDetail = () => {
 
     return (
         <div>
-            <div className='post'>
+            <div style={{ display: 'flex' }}>
+            <div className="post" style={{ display: 'flex', flex: 1 }}>
+                <div className="post_inside" style={{ flex: 7, flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div className='post-info'>
-                    <div className='poster-pic'>
-                        {post.name ? post.name.charAt(0).toUpperCase() : ''}
+                        <div className='poster-pic'>
+                            {post.name ? post.name.charAt(0).toUpperCase() : ''}
+                        </div>
+                        <p className='poster-name'>{post.name}</p>
                     </div>
-                    <p className='poster-name'>{post.name}</p>
-                </div>
-                <h1 className='post-title'>{post.title}</h1>
+                    
+                    <h1 className='post-title'>{post.title}</h1>
 
-                <p className='post-content'>{post.content}</p>
-                {post.tags && post.tags.map((tag, index) => (
-                    <span className='tag' key={index}># {tag}</span>
-                ))}   
-                <div class="button">
-                    <FontAwesomeIcon icon={faHeart} onClick={likeClick} className={`like-icon ${hasLiked ? 'liked' : ''}`}  /> {likes} 
-                    <FontAwesomeIcon icon={faComment} className="comment-icon" />       
-                    <FontAwesomeIcon icon={faShare} className="comment-icon" />
-                </div>  
+                    <p className='post-content'>{post.content}</p>
+                        {post.tags && post.tags.map((tag, index) => (
+                            <span className='tag' key={index}># {tag}</span>
+                        ))}   
+                    <div class="button">
+                        <FontAwesomeIcon icon={faHeart} onClick={likeClick} className={`like-icon ${hasLiked ? 'liked' : ''}`}  /> {likes} 
+                        <FontAwesomeIcon icon={faComment} className="comment-icon" />       
+                        <FontAwesomeIcon icon={faShare} className="comment-icon" />
+                    </div>
+                </div>
+                <div style={{ flex: 3, display: 'flex', alignItems: 'center', marginTop: '30px' }}>
+                    <img 
+                        src={post.img_url} 
+                        alt="Image" 
+                        style={{ maxWidth: '300px', maxHeight: 'auto', borderRadius: '10px' }} 
+                    />
+                </div>
+            </div>
             </div>
         </div>
     );
 }
 
 export default PostDetail;
+

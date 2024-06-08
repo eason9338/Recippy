@@ -89,17 +89,17 @@ const Home = () => {
                                 </div>
                             </div>
                             <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center'}}>
-                            <img 
-                                src={post.img_url} 
-                                alt="Image" 
-                                style={{ maxWidth: '300px', maxHeight: 'auto' ,borderRadius: '10px'}} 
-                            />
+                                <img 
+                                    src={post.img_url} 
+                                    alt="Image" 
+                                    style={{ maxWidth: '300px', maxHeight: 'auto' ,borderRadius: '10px'}} 
+                                />
                             </div>
-                            <h3 className='post-title'>{post.post_title}</h3>
+                            {/* <h3 className='post-title'>{post.post_title}</h3>
                             {post.post_tags && post.post_tags.map((tag, index) => (
                                 <span className='tag' key={index}># {tag}</span>
                             ))}
-                            <p className="post-content">{post.post_content}</p>
+                            <p className="post-content">{post.post_content}</p> */}
 
                         </div>
                     </div>

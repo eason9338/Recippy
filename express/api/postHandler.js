@@ -63,17 +63,18 @@ router.get('/search', (req, res) => {
     });
 });
 
-// get personal page post api
+// get personal page post api 1
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, 
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id,  image.url_string AS img_url, 
         COUNT(user_like.user_id) AS like_count
         FROM post
         JOIN user ON post.user_id = user.user_id
         LEFT JOIN user_like ON post.post_id = user_like.post_id
+        left join image on image.image_id = post.image_id
         WHERE post.user_id = ?
         GROUP BY post.post_id
     `;
@@ -115,7 +116,8 @@ router.get('/homePost', (req, res) => {
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
                     name: post.user_name,
-                    like_count: post.like_count
+                    like_count: post.like_count,
+                    img_url: post.img_url
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
@@ -142,32 +144,20 @@ router.delete('/delete_Post/:post_id', (req, res) => {
     });
 });
 
+// 2
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, 
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, image.url_string AS img_url, 
         COUNT(user_like.user_id) AS like_count
         FROM post
         JOIN user ON post.user_id = user.user_id
         LEFT JOIN user_like ON post.post_id = user_like.post_id
+        left join image on image.image_id = post.image_id
         WHERE post.user_id = ?
         GROUP BY post.post_id
-               SELECT 
-            post.post_id, 
-            post.user_id, 
-            post.title AS post_title, 
-            post.content AS post_content, 
-            user.user_name, 
-            post.like_tag, 
-            image.url_string AS img_url
-        FROM 
-            post
-        JOIN 
-            user ON post.user_id = user.user_id
-        LEFT JOIN 
-            image ON post.image_id = image.image_id
     `;
 
     db.query(postQuery, [userId], (err, postResults) => {
@@ -207,7 +197,8 @@ router.get('/homePost', (req, res) => {
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
                     name: post.user_name,
-                    like_count: post.like_count
+                    like_count: post.like_count,
+                    img_url: post.img_url
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
@@ -364,9 +355,10 @@ router.get('/post/:post_id', async (req, res) => {
     console.log('postId: ', post_id);
     try {
         const postQuery = `
-            SELECT post.post_id, post.title AS post_title, post.content AS post_content, post.like_tag, post.share_tag, user.user_name
+            SELECT post.post_id, post.title AS post_title, post.content AS post_content, post.like_tag, post.share_tag, user.user_name, post.post_id, image.url_string
             FROM post
             JOIN user ON post.user_id = user.user_id
+            join image on post.image_id = image.image_id
             WHERE post.post_id = ?
         `;
 
@@ -395,6 +387,7 @@ router.get('/post/:post_id', async (req, res) => {
             name: post.user_name,
             share_tag: post.share_tag,
             like_tag: post.like_tag,
+            img_url: post.url_string,
             tags: tagResults.map(tag => tag.tag_name)
         }});
     } catch (err) {

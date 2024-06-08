@@ -32,7 +32,7 @@ const User = () => {
                 cancelButtonText: '取消'
             }).then((result) => {
                 if(result.isConfirmed){
-                    // deletePost(post_id);
+                    deletePost(post_id);
                 }
             });
         } else if (action === 'Edit') {
@@ -95,7 +95,7 @@ const User = () => {
                                             <h3 className='post-title'>{post.title}</h3>
                                             <div className='icon-container'>
                                                 <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post.id)} />
-                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => deletePost(post.id)} />
+                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post.id)} />
                                             </div>
                                         </div>
                                         <p className="post-content">{post.content}</p>
@@ -112,7 +112,7 @@ const User = () => {
                                     </div>
                                     <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center' }}>
                                         <img
-                                            src={post.url_string}
+                                            src={post.img_url}
                                             alt="Image"
                                             style={{ maxWidth: '300px', maxHeight: 'auto', borderRadius: '10px' }}
                                         />
