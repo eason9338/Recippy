@@ -138,7 +138,7 @@ const User = () => {
                                     <div className="post_inside" style={{ flex: 7, justifyContent: 'space-between' }} >
                                         <div className='post-header'>
                                             {isEditing ? (
-                                                <input 
+                                                <input
                                                     type="text" 
                                                     value={editContent.title} 
                                                     onChange={(e) => setEditContent({ ...editContent, title: e.target.value })} 
@@ -172,9 +172,9 @@ const User = () => {
                                             <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                         </div>
                                         {isEditing && (
-                                            <div className="edit-buttons">
-                                                <button onClick={updatePost}>保存</button>
-                                                <button onClick={() => setEditPostId(null)}>取消</button>
+                                            <div>
+                                                <button className='edit-buttons' onClick={updatePost}>保存</button>
+                                                <button className='edit-buttons' onClick={() => setEditPostId(null)}>取消</button>
                                             </div>
                                         )}
                                     </div>
