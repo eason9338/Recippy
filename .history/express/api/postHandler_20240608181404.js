@@ -143,8 +143,9 @@ router.delete('/delete_Post/:post_id', (req, res) => {
 });
 
 // edit post
-router.put('/updatePost/:editPostId', (req, res) => {
-    const postId = req.params.post_id;
+// edit post
+router.put('/updatePost/:post_id', (req, res) => {
+    const postId = req.params.post_id;  // 修正這行：從 req.params.post_id 而不是 req.params.editPostId 取值
     const { title, content, tags } = req.body;
 
     const updatePostQuery = `
@@ -187,6 +188,7 @@ router.put('/updatePost/:editPostId', (req, res) => {
         });
     });
 });
+
 
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;

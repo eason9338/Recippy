@@ -145,7 +145,7 @@ router.delete('/delete_Post/:post_id', (req, res) => {
 // edit post
 router.put('/updatePost/:editPostId', (req, res) => {
     const postId = req.params.post_id;
-    const { title, content, tags } = req.body;
+    const { title, content, tags } =  req.body;
 
     const updatePostQuery = `
         UPDATE post
@@ -388,7 +388,7 @@ router.post('/searchByTags', async (req, res) => {
 
 // Content API
 router.get('/post/:post_id', async (req, res) => {
-    const post_id = req.params.post_id;
+    const postId = req.params.post_id;
 
     console.log('postId: ', post_id);
     try {

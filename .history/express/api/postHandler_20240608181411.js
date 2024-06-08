@@ -143,7 +143,8 @@ router.delete('/delete_Post/:post_id', (req, res) => {
 });
 
 // edit post
-router.put('/updatePost/:editPostId', (req, res) => {
+// edit post
+router.put('/updatePost/:post_id', (req, res) => {
     const postId = req.params.post_id;
     const { title, content, tags } = req.body;
 

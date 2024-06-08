@@ -41,7 +41,6 @@ const User = () => {
             setEditPostId(post_id.id);
             setEditContent({ title: post_id.title, content: post_id.content, tags: post_id.tags });
             Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
-            updatePost()
         }
     };
 
@@ -93,7 +92,7 @@ const User = () => {
         }
     } catch (error) {
         console.error('Error updating post:', error);
-        //Swal.fire('更新失敗', '伺服器錯誤', 'error');
+        Swal.fire('更新失敗', '伺服器錯誤', 'error');
     }
 };
 
