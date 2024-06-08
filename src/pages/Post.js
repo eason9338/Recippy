@@ -33,14 +33,14 @@ const PostDetail = () => {
 
     }
 
-    const handleMenuClick = (action) => {
-        if (action == 'Delete') {
-            Swal.fire('Delete Post', 'You clicked the delete post option', 'warning');
-        } else if (action == 'Edit') {
-            Swal.fire('Edit Post', 'You clickedthe edit post potion', 'info');
-        }
-        setShowMenu(false);
-    };
+    // const handleMenuClick = (action) => {
+    //     if (action == 'Delete') {
+    //         Swal.fire('Delete Post', 'You clicked the delete post option', 'warning');
+    //     } else if (action == 'Edit') {
+    //         Swal.fire('Edit Post', 'You clickedthe edit post potion', 'info');
+    //     }
+    //     setShowMenu(false);
+    // };
 
 
     useEffect(() => {

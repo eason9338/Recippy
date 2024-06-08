@@ -278,8 +278,6 @@ router.get('/posts', (req, res) => {
                     like_tag: post.like_tag,
                     img_url: post.img_url,
                     name: post.user_name
-                    name: post.user_name,
-                    img_url: post.img_url
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });

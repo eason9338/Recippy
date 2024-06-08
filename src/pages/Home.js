@@ -22,6 +22,12 @@ const Home = () => {
         if (user) {
             getPostList(user.user_id);
         }
+    }, []);
+
+    useEffect(() => {
+        if (user) {
+            getPostList(user.user_id);
+        }
     }, [user]);
 
     useEffect(() => {
