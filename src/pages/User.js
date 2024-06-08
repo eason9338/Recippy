@@ -41,7 +41,6 @@ const User = () => {
             setEditPostId(post_id.id);
             setEditContent({ title: post_id.title, content: post_id.content, tags: post_id.tags });
             Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
-            updatePost()
         }
     };
 
@@ -69,33 +68,33 @@ const User = () => {
     };
 
     const updatePost = async () => {
-    try {
-        const response = await fetch(`http://localhost:8000/api/updatePost/${editPostId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}`
-            },
-            body: JSON.stringify({
-                title: editContent.title,
-                content: editContent.content,
-                tags: editContent.tags
-            })
-        });
+        try {
+            const response = await fetch(`http://localhost:8000/api/updatePost/${editPostId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: JSON.stringify({
+                    title: editContent.title,
+                    content: editContent.content,
+                    tags: editContent.tags
+                })
+            });
 
-        const data = await response.json();
-        if (data.success) {
-            Swal.fire('更新成功', '文章已更新', 'success');
-            setPosts(posts.map(post => post.id === editPostId ? { ...post, ...editContent } : post)); // 更新狀態
-            setEditPostId(null); // 清除編輯狀態
-        } else {
-            Swal.fire('更新失敗', '無法更新文章', 'error');
+            const data = await response.json();
+            if (data.success) {
+                Swal.fire('更新成功', '文章已更新', 'success');
+                setPosts(posts.map(post => post.id === editPostId ? { ...post, ...editContent } : post)); // 更新狀態
+                setEditPostId(null); // 清除編輯狀態
+            } else {
+                Swal.fire('更新失敗', '無法更新文章', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating post:', error);
+            Swal.fire('更新失敗', '伺服器錯誤', 'error');
         }
-    } catch (error) {
-        console.error('Error updating post:', error);
-        //Swal.fire('更新失敗', '伺服器錯誤', 'error');
-    }
-};
+    };
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -137,8 +136,8 @@ const User = () => {
                                                 <h3 className='post-title'>{post.title}</h3>
                                             )}
                                             <div className='icon-container'>
-                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post.id)} />
-                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => deletePost(post.id)} />
+                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post)} />
+                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post)} />
                                             </div>
                                         </div>
                                         {isEditing ? (
