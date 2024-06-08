@@ -33,17 +33,13 @@ const User = () => {
                 cancelButtonText: '取消'
             }).then((result) => {
                 if(result.isConfirmed){
-                    deletePost(post_id);
+                    // deletePost(post_id);
                 }
             });
         } else if (action == 'Edit') {
             Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
         }
     };
-
-    const likeClick = () => {
-        setLikes(likes + 1);
-      };
       
     
     useEffect(() => {
@@ -120,7 +116,6 @@ const User = () => {
                 }
 
             </div>
-            <button onClick={logout}>Log out</button>
         </div>
     );
 }
