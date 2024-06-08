@@ -33,7 +33,7 @@ const User = () => {
                 cancelButtonText: '取消'
             }).then((result) => {
                 if(result.isConfirmed){
-                    deletePost(post_id);
+                    // deletePost(post_id);
                 }
             });
         } else if (action == 'Edit') {

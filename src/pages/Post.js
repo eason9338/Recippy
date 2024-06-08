@@ -11,12 +11,8 @@ import { useUser } from '../context/UserContext.js';
 const PostDetail = () => {
     const { post_id } = useParams();
     const [post, setPost] = useState(null);
-    //const[likeCount, setLikeCount] = useState(post.like_tag);
     const[likeCount, setLikeCount] = useState(0);
-    //const[shareCount, setShareCount] = useState(post.share_tag);
-    const[shareCount, setShareCount] = useState(0);
-    const[isLiked, setIsLiked] = useState(false);
-    const[isShared, setIsShared] = useState(false);
+    const[likes, setLikes] = useState(false);
     const [hasLiked, setHasLiked] = useState(false);
     const { user } = useUser();
 
@@ -24,21 +20,7 @@ const PostDetail = () => {
     const[yPos, setYPos] = useState('0px');
     const[showMenu, setShowMenu] = useState(false);
 
-    const handleLike = async(post_id) => {
-        if(!isLiked) {
-            setLikeCount(likeCount + 1);
-            setIsLiked(true);
-        }
-        
-    };
-
-    const handleShare = () => {
-        if(!isShared) {
-            setShareCount(shareCount +1);
-            setIsShared(true);
-        }
-    };
-
+   
     const handleContextMenu = (event) => {
         event.preventDefault();
         setXPos(`${event.pageX}px`);
