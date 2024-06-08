@@ -148,7 +148,7 @@ const User = () => {
                                                 <h3 className='post-title'>{post.title}</h3>
                                             )}
                                             <div className='icon-container'>
-                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post.id)} />
+                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post)} />
                                                 <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post.id)} />
                                             </div>
                                         </div>
