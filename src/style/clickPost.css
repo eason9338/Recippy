@@ -61,7 +61,7 @@
     padding-top: 15px;
 }
 
-.like-button, .share-button {
+/* .like-button, .share-button {
     background: none;
     border: none;
     cursor: pointer;
@@ -69,8 +69,8 @@
     align-items: baseline;
     margin-right: 10px;
     color: rgb(174, 174, 174);
-}
-
+} */
+/* 
 .like-button.liked {
     color: rgb(205, 82, 82);
 }
@@ -84,7 +84,7 @@
     display: inline;
     align-items: baseline;
     margin: 10px;
-}
+} */
 
 .context-menu {
     position: absolute;

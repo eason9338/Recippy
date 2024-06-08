@@ -31,7 +31,7 @@ const User = () => {
                 confirmButtonText: '確定',
                 cancelButtonText: '取消'
             }).then((result) => {
-                if (result.isConfirmed) {
+                if(result.isConfirmed){
                     deletePost(post_id);
                 }
             });
@@ -62,7 +62,7 @@ const User = () => {
             Swal.fire('刪除失敗', '伺服器錯誤', 'error');
         }
     };
-
+  
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await fetch(`http://localhost:8000/api/homePost?userId=${user.user_id}`, {
@@ -126,7 +126,6 @@ const User = () => {
                     }) : <p>No posts available</p>
                 }
             </div>
-            <button onClick={logout}>Log out</button>
         </div>
     );
 }

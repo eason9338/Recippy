@@ -95,23 +95,35 @@ h2 {
     align-items: center;
     margin-top: 10px;
 }
+/* .like-icon {
+    transition: transform 0.3s, background-color 0.3s;
+    cursor: pointer;
+    font-size: 24px;
+   
+} */
+.home-love {
+   
+}
 
 .like-icon :hover {
     color: red;
-  }
+}
+
+.like-icon.liked {
+    color: blue;
+}
 .comment-icon :hover{
     color: rgb(220, 160, 0)
 }
-.line＿icon{
+/* .line＿icon{
     transition: transform 0.3s, background-color 0.3s;
     cursor: pointer;
     font-size: 24px;
 }
 .line＿icon :hover {
     color: #a40431;
-    /* color: red; */
     transform: scale(1.1);
-}
+} */
 
 .post-title {
     margin-top: 5px;
