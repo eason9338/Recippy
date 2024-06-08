@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faShare } from '@fortawesome/free-solid-svg-icons';
 import '../style/clickPost.css';
 import Swal from 'sweetalert2';
+import { faComment} from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { useUser } from '../context/UserContext.js';
 
 const PostDetail = () => {
     const { post_id } = useParams();
@@ -14,6 +17,8 @@ const PostDetail = () => {
     const[shareCount, setShareCount] = useState(0);
     const[isLiked, setIsLiked] = useState(false);
     const[isShared, setIsShared] = useState(false);
+    const [hasLiked, setHasLiked] = useState(false);
+    const { user } = useUser();
 
     const[xPos, setXPos] = useState('0px');
     const[yPos, setYPos] = useState('0px');
@@ -57,16 +62,29 @@ const PostDetail = () => {
         setShowMenu(false);
     };
 
+
     useEffect(() => {
         const fetchPostData = async () => {
+
             try {
-                console.log('post_id on post.js', post_id);
                 const response = await fetch(`http://localhost:8000/api/post/${post_id}`);
+                
                 const data = await response.json();
                 if(data.success) {
                     setPost(data.post);
-                    setLikeCount(data.post.like_tag || 0);
-                    setShareCount(data.post.share_tag || 0);
+                } else {
+                    console.error('文章讀取失敗', data.message);
+                }
+            } catch (error) {
+                console.error('網絡錯誤或伺服器問題', error);
+            }
+            try {
+                const response = await fetch(`http://localhost:8000/api/post/like-status/${post_id}/${user.user_id}`);
+                
+                const data = await response.json();
+                if(data.success) {
+                    setLikes(data.like_tag || 0);
+                    setHasLiked(data.hasLiked);
                 } else {
                     console.error('文章讀取失敗', data.message);
                 }
@@ -74,7 +92,7 @@ const PostDetail = () => {
                 console.error('網絡錯誤或伺服器問題', error);
             }
         };
-
+        
         fetchPostData();
     }, [post_id]);
 
@@ -90,6 +108,44 @@ const PostDetail = () => {
             document.removeEventListener('click', handleDocumentClick);
         };
     }, [showMenu]);
+    // const handleLike = async () => {
+    //     try {
+    //         const response = await fetch(`http://localhost:8000/api/post/${post_id}/like-status`, {
+    //             method: 'POST',
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify(post_id)
+    //         });
+    //         const data = await response.json();
+    //         if (data.success) {
+
+    //             setPost(prevPost => ({
+    //                 ...prevPost,
+    //                 like_tag: data.like_tag
+    //             }));
+    //         } else {
+    //             console.error('點贊fail', data.message);
+    //         }
+    //     } catch (error) {
+    //         console.error('伺服器問題', error);
+    //     }
+    //     handleLike();
+    // }
+    const likeClick = async() => {
+        // setLikes(likes + 1);
+        const response = await fetch(`http://localhost:8000/api/post/${post_id}/${user.user_id}/like`, {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ hasLiked: !hasLiked })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            setLikes(data.like_tag);
+            setHasLiked(!hasLiked);
+        } else {
+            console.error('Like update failed');
+        }
+    };
 
     if (!post) {
         return <div>Loading...</div>;
@@ -111,16 +167,12 @@ const PostDetail = () => {
                     <span className='tag' key={index}># {tag}</span>
                 ))}   
                  
-                <div className='interaction'>
-                    <button className={`like-button ${isLiked ? 'liked' : ''}`} onClick = {handleLike} disabled={isLiked}>
-                        <FontAwesomeIcon icon={faHeart}  className="like-icon" />
-                        <p className='like_num'>{likeCount ? likeCount : 0}</p>
-                    </button>
-                    <button className={`share-button ${isShared ? 'shared' : ''}`} onClick = {handleLike} disabled={isShared}>
-                        <FontAwesomeIcon icon={faShare} className="comment-icon" />
-                        {/* <p className='share_num'>{shareCount}</p> */}
-                    </button>
-                </div>         
+                 <p className='post-content'>{post.like_tag}</p>
+                <div class="button">
+                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                    <FontAwesomeIcon icon={faComment} className="comment-icon" />       
+                    <FontAwesomeIcon icon={faShare} className="comment-icon" />
+                </div>  
             </div>
 
             <div className={`context-menu ${showMenu ? 'show' : ''}`}

@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS `post` (
   `user_id` int NOT NULL,
   `content` varchar(200) DEFAULT NULL,
   `share_tag` int DEFAULT NULL,
-  `like_tag` int DEFAULT NULL,
-  `comment_tag` int DEFAULT NULL,
+  `like_tag` int DEFAULT 0,
+  `comment_tag` int DEFAULT 0,
   `image_id` int DEFAULT NULL,
   PRIMARY KEY (`post_id`),
   KEY `image_ID_idx` (`image_id`),
@@ -81,11 +81,18 @@ CREATE TABLE IF NOT EXISTS `post_tag` (
   CONSTRAINT `tag_id_fk` FOREIGN KEY (`post_id`) REFERENCES `post` (`post_id`) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS `likes` (
-    like_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    post_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY unique_like (user_id, post_id),
-    FOREIGN KEY (user_id) REFERENCES user(user_id),
-    FOREIGN KEY (post_id) REFERENCES post(post_id)
+  like_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  post_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY unique_like (user_id, post_id),
+  FOREIGN KEY (user_id) REFERENCES user(user_id),
+  FOREIGN KEY (post_id) REFERENCES post(post_id)
+);
+CREATE TABLE IF NOT EXISTS `user_like` (
+  `user_id` INT,
+  `post_id` INT,
+  PRIMARY KEY (user_id, post_id),
+  FOREIGN KEY (user_id) REFERENCES user(user_id),
+  FOREIGN KEY (post_id) REFERENCES post(post_id)
 );
