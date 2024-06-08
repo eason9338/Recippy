@@ -9,21 +9,39 @@ import { useUser } from '../context/UserContext.js';
 const PostDetail = () => {
     const { post_id } = useParams();
     const [post, setPost] = useState(null);
-    //const[likeCount, setLikeCount] = useState(post.like_tag);
     const[likeCount, setLikeCount] = useState(0);
-    //const[shareCount, setShareCount] = useState(post.share_tag);
-    const[shareCount, setShareCount] = useState(0);
     const[likes, setLikes] = useState(false);
     const [hasLiked, setHasLiked] = useState(false);
     const { user } = useUser();
 
-    const handleLike = async(post_id) => {
-        if(!likes) {
-            setLikeCount(likeCount + 1);
-            setLikes(true);
+    const[xPos, setXPos] = useState('0px');
+    const[yPos, setYPos] = useState('0px');
+    const[showMenu, setShowMenu] = useState(false);
+
+   
+    const handleContextMenu = (event) => {
+        event.preventDefault();
+        setXPos(`${event.pageX}px`);
+        setYPos(`${event.pageY}px`);
+        setShowMenu(true);
+    }
+
+    const handleClick = () => {
+        if(showMenu){
+            setShowMenu(false);
         }
-        
-    };
+
+    }
+
+    // const handleMenuClick = (action) => {
+    //     if (action == 'Delete') {
+    //         Swal.fire('Delete Post', 'You clicked the delete post option', 'warning');
+    //     } else if (action == 'Edit') {
+    //         Swal.fire('Edit Post', 'You clickedthe edit post potion', 'info');
+    //     }
+    //     setShowMenu(false);
+    // };
+
 
     useEffect(() => {
         const fetchPostData = async () => {
