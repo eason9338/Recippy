@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext.js';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faShare } from '@fortawesome/free-solid-svg-icons'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
-import { faComment} from '@fortawesome/free-solid-svg-icons'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faShare, faHeart, faComment, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+//import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import '../style/Post.css';
+import Swal from 'sweetalert2';
 
 
 const User = () => {
@@ -22,6 +21,30 @@ const User = () => {
         navigate('/')
         console.log('登出成功')
     }
+
+    const handleIconClick = (action, post_id) => {
+        if (action == 'Delete') {
+            Swal.fire({
+                title: '確定刪除文章嗎?', 
+                text: '刪除即無法恢復!', 
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '確定',
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if(result.isConfirmed){
+                    deletePost(post_id);
+                }
+            });
+        } else if (action == 'Edit') {
+            Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
+        }
+    };
+
+    const likeClick = () => {
+        setLikes(likes + 1);
+      };
+      
     
     useEffect(() => {
         const fetchPosts = async () => {
@@ -62,11 +85,16 @@ const User = () => {
                         console.log("get", post);
                         return (
                             <div key={index} className='post'>
-                                <div style={{ display: 'flex' }}>
-                                    <div className="post_inside" style={{ flex: 7, justifyContent: 'space-between' }} >
-                                        <h3 className='post-title'>{post.title}</h3>
-                                        <FontAwesomeIcon icon={faTrash} className="line＿icon" onClick={deleteClick} style={{ position: 'absolute', right: 35, top: 25 }} />
-                                        <p className="post-content">{post.content}</p>
+                                <div style={{ display: 'flex', flex:2 }}>
+                                    <div className="post_inside" style={{  flex: 7,justifyContent: 'space-between' }} >
+                                        <div className='post-header'>
+                                        <h3 className='post-title'>{post.post_title}</h3>
+                                            <div className='icon-container'>
+                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit')} />
+                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post.post_id)} />
+                                            </div>
+                                        </div>
+                                        <p className="post-content">{post.post_content}</p>
                                         <div>
                                             {post.tags.map((tag, index) => {
                                                 return <span key={index} className='tag'>{tag}</span>
@@ -90,6 +118,7 @@ const User = () => {
                         )
                     }) : <p>No posts available</p>
                 }
+
             </div>
             <button onClick={logout}>Log out</button>
         </div>

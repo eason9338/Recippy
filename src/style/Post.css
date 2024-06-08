@@ -7,8 +7,10 @@ h2 {
     margin-bottom: 30px;
 }
 .post-title{
-    margin-top: 3px;
+    margin: 0;
     font-size: 20px;
+    flex: 1;
+
 }
 .post-content{
     margin: 6px;
@@ -28,6 +30,12 @@ h2 {
 }
 .post_inside{
     padding: 10px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 /*.post-inside{
     justify-content: center;
@@ -126,4 +134,21 @@ h2 {
     margin-bottom: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.icon-container {
+    display: flex;
+    gap: 10px;
+}
+
+.icon {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 10px;
+    cursor: pointer;
+    right: 25px;
+}
+
+.icon :hover {
+    color: orange;
 }
