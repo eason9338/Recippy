@@ -160,36 +160,10 @@ router.put('/updatePost/:post_id', (req, res) => {
             console.error('Error updating post: ', err);
             res.status(500).send('Server error');
             return;
+        } else {
+            console.log(`Tags for post ${postId} updated successfully`);
+            res.status(200).json({ success: true, message: 'Post updated' });
         }
-
-        console.log(`Post ${postId} updated, now updating tags`);
-
-        const deleteTagsQuery = `
-            DELETE FROM post_tag WHERE post_id = ?
-        `;
-
-        db.query(deleteTagsQuery, [postId], (err, result) => {
-            if (err) {
-                console.error('Error deleting tags: ', err);
-                res.status(500).send('Server error');
-                return;
-            }
-
-            const insertTagsQuery = `
-                INSERT INTO post_tag (post_id, tag_id) VALUES (?, ?)
-            `;
-            const tagPromises = tags.map(tag => db.promise().query(insertTagsQuery, [postId, tag.value]));
-
-            Promise.all(tagPromises)
-                .then(() => {
-                    console.log(`Tags for post ${postId} updated successfully`);
-                    res.status(200).json({ success: true, message: 'Post updated' });
-                })
-                .catch(error => {
-                    console.error('Error inserting tags: ', error);
-                    res.status(500).send('Server error');
-                });
-        });
     });
 });
 
