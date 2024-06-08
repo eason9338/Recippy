@@ -6,6 +6,35 @@ h2 {
     align-items: center;
     margin-bottom: 30px;
 }
+
+h3 {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+hr.solid {
+    margin-top: 30px;
+    border-top: 3px solid rgb(245, 245, 245);
+    border-radius: 30px;
+}
+
+.name-info, .email-info {
+    align-items: center;
+    display: flex;
+}
+
+.modify-info-button {
+    justify-content: center;
+    background-color: orange;
+    color: white;
+    border-radius: 30px;
+    border: none;
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    cursor: pointer;
+}
+
 .post-title{
     margin: 0;
     font-size: 20px;

@@ -117,6 +117,18 @@ const User = () => {
         <div>
             <h2 className={displayName ? '' : 'hide'}>Hello {displayName}, this is your personal page</h2>
             <div>
+                <h3>Personal Info</h3>
+                <div className='name-info'>
+                    <p>Name: {user.user_name}</p>
+                    <button className='modify-info-button'>修改</button>
+                </div>
+                <div className='email-info'>
+                    <p>Email: {user.user_email}</p>
+                    <button className='modify-info-button'>修改</button>
+                </div>
+                <hr class="solid"></hr>
+            </div>
+            <div>
                 {
                     posts.length > 0 ? posts.map((post, index) => {
                         const isEditing = editPostId === post.id;
