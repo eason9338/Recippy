@@ -63,7 +63,8 @@ export const SearchProvider = ({ children }) => {
                     id: post.id,
                     name: post.name,
                     likeCount: post.like_tag,
-                    img_url: post.img_url
+                    img_url:post.img_url,
+
                 }));
                 setResults(newPosts);
                 console.log(results);  
