@@ -34,14 +34,13 @@ const User = () => {
                 cancelButtonText: '取消'
             }).then((result) => {
                 if(result.isConfirmed){
-                    // deletePost(post_id);
+                    deletePost(post_id);
                 }
             });
         } else if (action === 'Edit') {
             setEditPostId(post_id.id);
             setEditContent({ title: post_id.title, content: post_id.content, tags: post_id.tags });
             Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
-            updatePost()
         }
     };
 
@@ -93,9 +92,10 @@ const User = () => {
         }
     } catch (error) {
         console.error('Error updating post:', error);
-        //Swal.fire('更新失敗', '伺服器錯誤', 'error');
+        Swal.fire('更新失敗', '伺服器錯誤', 'error');
     }
 };
+
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -113,6 +113,9 @@ const User = () => {
         fetchPosts();
     }, [user]);
 
+    const likeClick = () => {
+        setLikes(likes + 1);
+    };
 
     return (
         <div>
@@ -137,8 +140,8 @@ const User = () => {
                                                 <h3 className='post-title'>{post.title}</h3>
                                             )}
                                             <div className='icon-container'>
-                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post.id)} />
-                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => deletePost(post.id)} />
+                                                <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post)} />
+                                                <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleIconClick('Delete', post)} />
                                             </div>
                                         </div>
                                         {isEditing ? (
@@ -156,7 +159,7 @@ const User = () => {
                                             })}
                                         </div>
                                         <div className="button">
-                                            <FontAwesomeIcon icon={faHeart}  className="like-icon" /> {likes}
+                                            <FontAwesomeIcon icon={faHeart} onClick={likeClick} className="like-icon" /> {likes}
                                             <FontAwesomeIcon icon={faComment} className="comment-icon" />
                                             <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                         </div>

@@ -143,8 +143,9 @@ router.delete('/delete_Post/:post_id', (req, res) => {
 });
 
 // edit post
-router.put('/updatePost/:editPostId', (req, res) => {
-    const postId = req.params.post_id;
+// edit post
+router.put('/updatePost/:post_id', (req, res) => {
+    const postId = req.params.post_id;  // 修正這行：從 req.params.post_id 而不是 req.params.editPostId 取值
     const { title, content, tags } = req.body;
 
     const updatePostQuery = `
@@ -188,6 +189,7 @@ router.put('/updatePost/:editPostId', (req, res) => {
     });
 });
 
+
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
@@ -200,20 +202,6 @@ router.get('/homePost', (req, res) => {
         LEFT JOIN user_like ON post.post_id = user_like.post_id
         WHERE post.user_id = ?
         GROUP BY post.post_id
-               SELECT 
-            post.post_id, 
-            post.user_id, 
-            post.title AS post_title, 
-            post.content AS post_content, 
-            user.user_name, 
-            post.like_tag, 
-            image.url_string AS img_url
-        FROM 
-            post
-        JOIN 
-            user ON post.user_id = user.user_id
-        LEFT JOIN 
-            image ON post.image_id = image.image_id
     `;
 
     db.query(postQuery, [userId], (err, postResults) => {
@@ -230,12 +218,12 @@ router.get('/homePost', (req, res) => {
             return;
         }
 
-    const tagQuery = `
-        SELECT pt.post_id, t.tag_name
-        FROM post_tag pt
-        JOIN tag t ON pt.tag_id = t.tag_id
-        WHERE pt.post_id IN (?)
-    `;
+        const tagQuery = `
+            SELECT pt.post_id, t.tag_name
+            FROM post_tag pt
+            JOIN tag t ON pt.tag_id = t.tag_id
+            WHERE pt.post_id IN (?)
+        `;
 
         db.query(tagQuery, [postIds], (err, tagResults) => {
             if (err) {
@@ -370,13 +358,11 @@ router.post('/searchByTags', async (req, res) => {
             p.title AS post_title, 
             p.content AS post_content, 
             u.user_name,
-            i.img_url
             GROUP_CONCAT(t.tag_name SEPARATOR ', ') AS post_tags
         FROM post p
         JOIN user u ON p.user_id = u.user_id
         JOIN post_tag pt ON pt.post_id = p.post_id
         JOIN tag t ON pt.tag_id = t.tag_id
-        JOIN image i ON post.image_id = i.image_id
         WHERE t.tag_name IN (?)
         GROUP BY p.post_id
         HAVING COUNT(DISTINCT t.tag_name) = ?
@@ -389,8 +375,7 @@ router.post('/searchByTags', async (req, res) => {
                 id: post.post_id,
                 title: post.post_title,
                 content: post.post_content,
-                name: post.user_name,
-                img_url: post.img_url
+                name: post.user_name
             }));
             res.status(200).json({ success: true, posts });
         } else {
