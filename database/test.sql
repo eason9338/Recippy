@@ -209,3 +209,12 @@ INSERT INTO tag (tag_id, tag_name, tag_type) VALUES (197, 'pressure cooker', 'co
 INSERT INTO tag (tag_id, tag_name, tag_type) VALUES (198, 'coffee maker', 'cooker');
 INSERT INTO tag (tag_id, tag_name, tag_type) VALUES (199, 'electric kettle', 'cooker');
 INSERT INTO tag (tag_id, tag_name, tag_type) VALUES (200, 'bread machine', 'cooker');
+
+INSERT INTO `user` (user_id, user_name, user_email, user_password) VALUES (1, '林姿慧', '111306015@nccu.edu.tw', '1234');
+INSERT INTO `user` (user_id, user_name, user_email, user_password) VALUES (2, '林美麗', '111306038@nccu.edu.tw', '1234');
+
+INSERT INTO `image`(image_id, url_string) VALUES (1,'https://imageproxy.icook.network/resize?background=255%2C255%2C255&nocrop=true&stripmeta=true&type=auto&url=http%3A%2F%2Ftokyo-kitchen.icook.tw.s3.amazonaws.com%2Fuploads%2Frecipe%2Fcover%2F459020%2Ff50b216191f9a3d2.jpg&width=1080');
+INSERT INTO `image`(image_id, url_string) VALUES (2,'https://imageproxy.icook.network/resize?background=255%2C255%2C255&nocrop=true&stripmeta=true&type=auto&url=http%3A%2F%2Ftokyo-kitchen.icook.tw.s3.amazonaws.com%2Fuploads%2Frecipe%2Fcover%2F402816%2F0b843625068fe4f1.jpg&width=1080');
+
+INSERT INTO post (title, content, like_tag, user_id, image_id) VALUES ('蜜汁櫛瓜蝦仁', '櫛瓜搭配甜鹹甜鹹的蜜汁醬一口咬下爽脆清甜又帶點蜂蜜的香氣整個超級下飯，各位快來嘗試看看吧😆',43,1,1);
+INSERT INTO post (title, content, like_tag, user_id, image_id) VALUES ('烏魚子煎蛋麵包', '過年前看到詹姆士希臘烏魚子早餐影片，決定過年期間利用澳洲能找到的食材來試做看看，沒想到烏魚子除了傳統吃法，搭配麵包和煎蛋也是非常美味呢!',89,2,2);
