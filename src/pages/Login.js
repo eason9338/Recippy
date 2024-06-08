@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useUser } from '../context/UserContext.js'
+import Swal from 'sweetalert2';
 import '../style/Login.css';
 
 const Login = () => {
@@ -31,10 +32,23 @@ const Login = () => {
             console.log("登入成功");
             localStorage.setItem("user", JSON.stringify(data.user));
             setUser(data.user);
-            navigate('/');
+            Swal.fire({
+                icon: 'success',
+                title: '登入成功',
+                text: '你已登入成功！',
+            }).then(() => {
+                navigate('/');
+            });
         }
-        else { console.error("登入失敗", data.message) }
-    }
+        else { 
+            console.error("登入失敗", data.message);
+            Swal.fire({
+                icon: 'error',
+                title: '登入失敗',
+                text: data.message,
+            });
+        }
+    };
 
     return ( 
         

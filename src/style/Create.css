@@ -35,6 +35,22 @@ input[type="text"] {
     box-shadow: 0 0 8px #ccc;
 }
 
+textarea[type='text'] {
+    width: calc(100% - 20px);
+    height: 100px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: box-shadow 0.3 ease-in-out;
+}
+
+.textarea[type='text']:focus {
+    box-shadow: 0 0 8px #ccc;
+}
+
 .create-button {
     width: calc(100% - 20px);
     padding: 10px;

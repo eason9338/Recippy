@@ -38,20 +38,24 @@ const Home = () => {
         console.log('post_id on home.js: ', post_id);
         navigate(`/post/${post_id}`);
     };
-    const likeClick = () => {
-        setLikes(likes + 1);
-      };
+    // useEffect(() =>{
+    //     const fetchLikeCount = async () => {
 
-
-    const handleTagClick = (tag) => {
-        setSelectedTags(prevTags => {
-            if (prevTags.includes(tag)) {
-                return prevTags.filter(t => t !== tag);
-            } else {
-                return [...prevTags, tag];
-            }
-        });
-    };
+    //         try {
+    //             const response = await fetch(`http://localhost:8000/api/post/like-status/${post_id}/${user.user_id}`);
+                
+    //             const data = await response.json();
+    //             if(data.success) {
+    //                 setLikes(data.like_tag || 0);
+    //             } else {
+    //                 console.error('文章讀取失敗', data.message);
+    //             }
+    //         } catch (error) {
+    //             console.error('網絡錯誤或伺服器問題', error);
+    //         }
+    //     };
+    //     fetchLikeCount();
+    // }, [post_id]);
 
     return (
         <div>
@@ -73,7 +77,7 @@ const Home = () => {
                                     <span className='tag' key={index}>{tag}</span>
                                 ))}
                                 <div class="button">
-                                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                                    <FontAwesomeIcon icon={faHeart} className="like-icon" /> {post.likeCount} 
                                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                 </div>
@@ -85,6 +89,12 @@ const Home = () => {
                                 style={{ maxWidth: '300px', maxHeight: 'auto' ,borderRadius: '10px'}} 
                             />
                             </div>
+                            <h3 className='post-title'>{post.post_title}</h3>
+                            {post.post_tags && post.post_tags.map((tag, index) => (
+                                <span className='tag' key={index}># {tag}</span>
+                            ))}
+                            <p className="post-content">{post.post_content}</p>
+
                         </div>
                     </div>
                 ))
