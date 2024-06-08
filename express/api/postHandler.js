@@ -63,7 +63,68 @@ router.get('/search', (req, res) => {
     });
 });
 
-// get post api
+// get personal page post api
+router.get('/homePost', (req, res) => {
+    const userId = req.query.userId;
+
+    // Acquired every post with user name
+    const postQuery = `
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, 
+        COUNT(user_like.user_id) AS like_count
+        FROM post
+        JOIN user ON post.user_id = user.user_id
+        LEFT JOIN user_like ON post.post_id = user_like.post_id
+        WHERE post.user_id = ?
+        GROUP BY post.post_id
+    `;
+
+    db.query(postQuery, [userId], (err, postResults) => {
+        if (err) {
+            console.error('Error fetching posts: ', err);
+            res.status(500).send('Server error');
+            return;
+        }
+
+        // Dealing with tags 
+        const postIds = postResults.map(post => post.post_id);
+        if (postIds.length === 0) {
+            res.json({ posts: [] });
+            return;
+        }
+
+        const tagQuery = `
+            SELECT pt.post_id, t.tag_name
+            FROM post_tag pt
+            JOIN tag t ON pt.tag_id = t.tag_id
+            WHERE pt.post_id IN (?)
+        `;
+
+        db.query(tagQuery, [postIds], (err, tagResults) => {
+            if (err) {
+                console.error('Error fetching tags: ', err);
+                res.status(500).send('Server error');
+                return;
+            }
+
+            const posts = postResults.map(post => {
+                return {
+                    id: post.post_id,
+                    title: post.post_title,
+                    content: post.post_content,
+                    tags: tagResults
+                        .filter(tag => tag.post_id === post.post_id)
+                        .map(tag => tag.tag_name),
+                    name: post.user_name,
+                    like_count: post.like_count
+                };
+            });
+            res.status(200).json({ success: true, posts, message: 'Posts fetched' });
+        });
+    });
+});
+
+
+// get home page post api
 router.get('/posts', (req, res) => {
     const userId = req.query.userId;
 
