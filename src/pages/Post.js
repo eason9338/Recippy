@@ -108,10 +108,8 @@ const PostDetail = () => {
                 {post.tags && post.tags.map((tag, index) => (
                     <span className='tag' key={index}># {tag}</span>
                 ))}   
-                 
-                 <p className='post-content'>{post.like_tag}</p>
                 <div class="button">
-                    <FontAwesomeIcon icon={faHeart}onClick={likeClick}  className="like-icon" /> {likes} 
+                    <FontAwesomeIcon icon={faHeart} onClick={likeClick} className={`like-icon ${hasLiked ? 'liked' : ''}`}  /> {likes} 
                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                 </div>  

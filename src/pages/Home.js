@@ -77,14 +77,14 @@ const Home = () => {
                                     <span className='tag' key={index}>{tag}</span>
                                 ))}
                                 <div class="button">
-                                    <FontAwesomeIcon icon={faHeart} className="like-icon" /> {post.likeCount} 
+                                    <FontAwesomeIcon icon={faHeart} className="home-love" /> {post.likeCount} 
                                     <FontAwesomeIcon icon={faComment} className="comment-icon" />       
                                     <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                 </div>
                             </div>
                             <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center'}}>
                             <img 
-                                src="https://imageproxy.icook.network/resize?background=255%2C255%2C255&nocrop=true&stripmeta=true&type=auto&url=http%3A%2F%2Ftokyo-kitchen.icook.tw.s3.amazonaws.com%2Fuploads%2Frecipe%2Fcover%2F457718%2F2adb25e6c32d1339.jpg&width=1080" 
+                                src={post.img_url} 
                                 alt="Image" 
                                 style={{ maxWidth: '300px', maxHeight: 'auto' ,borderRadius: '10px'}} 
                             />
