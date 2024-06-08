@@ -125,7 +125,7 @@ router.post('/post', async (req, res) => {
         const imgResults = await db.promise().query('INSERT INTO image (url_string) VALUES (?)', [selectedImg]);
         const imgId = imgResults[0].insertId;
 
-        const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, img_url) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
+        const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, image_id) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
         const postId = postResults[0].insertId;
 
         await Promise.all(selectedTags.map(tag => {
