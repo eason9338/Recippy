@@ -106,7 +106,6 @@ const Create = () => {
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                     ></textarea>
-                    <p>標籤</p>
 {/*                    
                     <input 
                         type="file"

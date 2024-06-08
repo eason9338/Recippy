@@ -14,9 +14,10 @@ router.get('/search', (req, res) => {
 
     const searchQuery = `
     
-        SELECT p.post_id, p.title AS post_title, p.content AS post_content, u.user_name
+        SELECT p.post_id, p.title AS post_title, p.content AS post_content, u.user_name, i.url_string, p.like_tag
         FROM post p
         JOIN user u ON p.user_id = u.user_id
+        JOIN image i ON p.image_id = i.image_id
         WHERE p.title LIKE ?
     `;
 
@@ -55,7 +56,8 @@ router.get('/search', (req, res) => {
                     .filter(tag => tag.post_id === post.post_id)
                     .map(tag => tag.tag_name),
                 name: post.user_name,
-                post_img: post.url_string
+                likeCount: post.like_tag,
+                img_url: post.url_string,
             }));
 
             res.status(200).json({ success: true, posts });
