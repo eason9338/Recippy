@@ -13,6 +13,8 @@ const User = () => {
     const displayName = user && user.user_name ? user.user_name : '';
     const navigate = useNavigate();
     const [likes, setLikes] = useState(0);
+    const [editContent, setEditContent] = useState({ title: '', content: '', tags: [] });
+    const [editPostId, setEditPostId] = useState(null);
 
     const logout = () => {
         setUser(null)
@@ -36,6 +38,8 @@ const User = () => {
                 }
             });
         } else if (action === 'Edit') {
+            setEditPostId(post_id.id);
+            setEditContent({ title: post_id.title, content: post_id.content, tags: post_id.tags });
             Swal.fire('編輯內容', '現在可以編輯貼文內容了!', 'info');
         }
     };
@@ -62,7 +66,32 @@ const User = () => {
             Swal.fire('刪除失敗', '伺服器錯誤', 'error');
         }
     };
-  
+
+    const updatePost = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/updatePost/${editPostId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: JSON.stringify(editContent)
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                Swal.fire('更新成功', '文章已更新', 'success');
+                setPosts(posts.map(post => post.id === editPostId ? { ...post, ...editContent } : post)); // 更新狀態
+                setEditPostId(null); // 清除編輯狀態
+            } else {
+                Swal.fire('更新失敗', '無法更新文章', 'error');
+            }
+        } catch (error) {
+            console.error('Error updating post:', error);
+            Swal.fire('更新失敗', '伺服器錯誤', 'error');
+        }
+    };
+
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await fetch(`http://localhost:8000/api/homePost?userId=${user.user_id}`, {
@@ -86,19 +115,36 @@ const User = () => {
             <div>
                 {
                     posts.length > 0 ? posts.map((post, index) => {
-                        console.log("get", post);
+                        const isEditing = editPostId === post.id;
                         return (
                             <div key={index} className='post'>
                                 <div style={{ display: 'flex', flex: 2 }}>
                                     <div className="post_inside" style={{ flex: 7, justifyContent: 'space-between' }} >
                                         <div className='post-header'>
-                                            <h3 className='post-title'>{post.title}</h3>
+                                            {isEditing ? (
+                                                <input 
+                                                    type="text" 
+                                                    value={editContent.title} 
+                                                    onChange={(e) => setEditContent({ ...editContent, title: e.target.value })} 
+                                                    className='edit-input'
+                                                />
+                                            ) : (
+                                                <h3 className='post-title'>{post.title}</h3>
+                                            )}
                                             <div className='icon-container'>
                                                 <FontAwesomeIcon icon={faEdit} className="icon" onClick={() => handleIconClick('Edit', post.id)} />
                                                 <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => deletePost(post.id)} />
                                             </div>
                                         </div>
-                                        <p className="post-content">{post.content}</p>
+                                        {isEditing ? (
+                                            <textarea 
+                                                value={editContent.content} 
+                                                onChange={(e) => setEditContent({ ...editContent, content: e.target.value })} 
+                                                className='edit-textarea'
+                                            />
+                                        ) : (
+                                            <p className="post-content">{post.content}</p>
+                                        )}
                                         <div>
                                             {post.tags.map((tag, index) => {
                                                 return <span key={index} className='tag'>{tag}</span>
@@ -109,6 +155,12 @@ const User = () => {
                                             <FontAwesomeIcon icon={faComment} className="comment-icon" />
                                             <FontAwesomeIcon icon={faShare} className="comment-icon" />
                                         </div>
+                                        {isEditing && (
+                                            <div className="edit-buttons">
+                                                <button onClick={updatePost}>保存</button>
+                                                <button onClick={() => setEditPostId(null)}>取消</button>
+                                            </div>
+                                        )}
                                     </div>
                                     <div style={{ display: 'flex', flex: 3, marginTop: '30px', alignItems: 'center' }}>
                                         <img
@@ -119,10 +171,11 @@ const User = () => {
                                     </div>
                                 </div>
                             </div>
-                        )
+                        );
                     }) : <p>No posts available</p>
                 }
             </div>
+            <button onClick={logout}>Log out</button>
         </div>
     );
 }

@@ -142,6 +142,52 @@ router.delete('/delete_Post/:post_id', (req, res) => {
     });
 });
 
+// edit post
+router.put('/updatePost/:editPostId', (req, res) => {
+    const postId = req.params.post_id;
+    const { title, content, tags } =  req.body;
+
+    const updatePostQuery = `
+        UPDATE post
+        SET title = ?, content = ?
+        WHERE post_id = ?
+    `;
+
+    db.query(updatePostQuery, [title, content, postId], (err, result) => {
+        if (err) {
+            console.error('Error updating post: ', err);
+            res.status(500).send('Server error');
+            return;
+        }
+
+        const deleteTagsQuery = `
+            DELETE FROM post_tag WHERE post_id = ?
+        `;
+
+        db.query(deleteTagsQuery, [postId], (err, result) => {
+            if (err) {
+                console.error('Error deleting tags: ', err);
+                res.status(500).send('Server error');
+                return;
+            }
+
+            const insertTagsQuery = `
+                INSERT INTO post_tag (post_id, tag_id) VALUES (?, ?)
+            `;
+            const tagPromises = tags.map(tag => db.promise().query(insertTagsQuery, [postId, tag.value]));
+
+            Promise.all(tagPromises)
+                .then(() => {
+                    res.status(200).json({ success: true, message: 'Post updated' });
+                })
+                .catch(error => {
+                    console.error('Error inserting tags: ', error);
+                    res.status(500).send('Server error');
+                });
+        });
+    });
+});
+
 router.get('/homePost', (req, res) => {
     const userId = req.query.userId;
 
