@@ -68,7 +68,7 @@ router.get('/posts', (req, res) => {
 
     // Acquired every post with user name
     const postQuery = `
-        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id
+        SELECT post.post_id, post.user_id, post.title AS post_title, post.content AS post_content, user.user_name, post.image_id AS image_id, post.like_tag
         FROM post
         JOIN user ON post.user_id = user.user_id
     `;
@@ -109,7 +109,12 @@ router.get('/posts', (req, res) => {
                     tags: tagResults
                         .filter(tag => tag.post_id === post.post_id)
                         .map(tag => tag.tag_name),
+<<<<<<< HEAD
+                    name: post.user_name,
+                    like_tag: post.like_tag
+=======
                     name: post.user_name
+>>>>>>> main
                 };
             });
             res.status(200).json({ success: true, posts, message: 'Posts fetched' });
@@ -125,7 +130,7 @@ router.post('/post', async (req, res) => {
         const imgResults = await db.promise().query('INSERT INTO image (url_string) VALUES (?)', [selectedImg]);
         const imgId = imgResults[0].insertId;
 
-        const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, img_url) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
+        const postResults = await db.promise().query('INSERT INTO post (title, content, user_id, image_id) VALUES (?, ?, ?, ?)', [title, content, user_id, imgId]);
         const postId = postResults[0].insertId;
 
         await Promise.all(selectedTags.map(tag => {
